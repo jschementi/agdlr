@@ -1,0 +1,6 @@
+require 'lib/helpers/debug'
+require 'lib/helpers/downloader'
+require 'lib/helpers/html'
+require 'lib/helpers/wpf'
+require 'lib/helpers/json' 
+require 'lib/helpers/xap'

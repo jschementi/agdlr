@@ -1,0 +1,23 @@
+README ------------------------------------------------------------------------
+  http://silverlight.net/dlr
+  http://codeplex.com/sdlsdk
+
+  The "Silverlight Dynamic Languages SDK" is the integration between Silverlight 
+  and Dynamic Languages running on the Dynamic Language Runtime (DLR). The 
+  languages included in this package are IronRuby, IronPython, and Managed
+  JScript.
+
+  Note: this package is meant to be used to develop applications with 
+  Silverlight 2 RTW. To install Silverlight, visit the following:
+
+  http://www.microsoft.com/silverlight/resources/install.aspx
+
+History -----------------------------------------------------------------------
+
+  June 9, 2008    - Source Release for Silverlight 2 Beta 2, forks from main
+                    package.
+  August 30, 2008 - new Source release for DLR/Languages
+  Sept 30, 2008   - new Source release for DLR/Languages to build against
+                    Silverlight 2 RC0.
+  Oct 15, 2008    - new Source release for DLR/Languages to build against
+                    Silverlight 2 RTW

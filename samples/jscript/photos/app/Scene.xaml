@@ -1,0 +1,59 @@
+﻿<Canvas
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  x:Class="System.Windows.Controls.Canvas"
+	Width="1000" Height="700"
+  Background="#FF000000"
+>
+	<Canvas RenderTransformOrigin="0.5,0.5" Width="259" Height="179" Canvas.Left="100" Canvas.Top="500" Background="#FFFFFFFF">
+		<Canvas.Triggers>
+			<EventTrigger RoutedEvent="Canvas.Loaded">
+			    <EventTrigger.Actions>
+					<BeginStoryboard>
+						<Storyboard x:Name="Timeline1" Storyboard.TargetName="ScaleTransform1">
+							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="ScaleX">
+								<SplineDoubleKeyFrame KeyTime="00:00:00.0000000" Value="0.2"/>
+								<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0.935"/>
+								<SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0.852"/>
+								<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="0.935"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="ScaleY">
+								<SplineDoubleKeyFrame KeyTime="00:00:00.0000000" Value="0.2"/>
+								<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0.935"/>
+								<SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0.852"/>
+								<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="0.935"/>
+							</DoubleAnimationUsingKeyFrames>
+						</Storyboard>
+					</BeginStoryboard>
+				<BeginStoryboard>
+					<Storyboard x:Name="Timeline2" Storyboard.TargetName="translate_transform">
+						<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="Y">
+							<SplineDoubleKeyFrame KeyTime="00:00:00" Value="-383"/>
+							<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="222"/>
+						</DoubleAnimationUsingKeyFrames>
+					</Storyboard>
+				</BeginStoryboard>
+			    </EventTrigger.Actions>
+			</EventTrigger>
+		</Canvas.Triggers>
+		<Canvas.RenderTransform>
+			<TransformGroup>
+				<ScaleTransform ScaleX="0.2" ScaleY="0.2" x:Name="ScaleTransform1"/>
+				<RotateTransform Angle="37"/>
+			</TransformGroup>
+		</Canvas.RenderTransform>
+		<Image x:Name="photo_frame" Width="241.82" Height="161.052" Canvas.Left="8" Canvas.Top="8" Source="assets/images/jaguar.jpg"/>
+	</Canvas>
+	<Canvas Width="269" Height="40" Canvas.Left="-114" Canvas.Top="324" RenderTransformOrigin="0.5,0.5" Background="#FFE5E01C">
+		<Canvas.RenderTransform>
+			<TransformGroup>
+				<RotateTransform Angle="-90"/>
+				<TranslateTransform X="0" Y="0" x:Name="translate_transform"/>
+			</TransformGroup>
+		</Canvas.RenderTransform>
+		<TextBlock Width="255" Height="32" Text="Woodland Park Zoo" TextWrapping="NoWrap" Canvas.Left="8" Canvas.Top="8" FontFamily="Arial" FontSize="24" FontWeight="Normal" />
+	</Canvas>
+  <TextBlock x:Name="text_block" Foreground="White" />
+  <TextBlock x:Name="msgbox" Foreground="White" Canvas.Top="300" />
+</Canvas>
+

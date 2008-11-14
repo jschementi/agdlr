@@ -1,0 +1,44 @@
+<html xmlns="http://www.w3.org/1999/xhtml" >
+
+<head>
+	
+   <title>Silverlight 2 RTW Samples - JScript Photos</title>
+   
+   <script src="assets/js/Silverlight.js" type="text/javascript" ></script>
+
+   <style type="text/css">
+      body {
+        padding: 0px; 
+        margin: 0px;
+	  	  background-color: black;
+      }
+   </style>
+
+</head>
+
+<body>
+
+  <div id="SilverlightControlHost" onload="self.focus()">
+    <script type="text/javascript">
+      var controlID = "SilverlightControl"
+      Silverlight.createObjectEx({
+		    source: "app.xap",
+		    parentElement: document.getElementById("SilverlightControlHost"),
+		    id: controlID,
+		    properties: {
+			    width:'100%', 
+			    height:'100%',
+			    inplaceInstallPrompt: false,
+			    background:'#00000000',
+			    isWindowless: 'True',
+			    version:'1.1'
+		    },
+		    events: {},
+		    initParams: "start=app.js, debug=true"
+		  });
+    </script>
+  </div>
+
+</body>
+
+</html>

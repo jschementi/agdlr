@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+
+<head>
+  <title>Silverlight 2 RTW Samples - Ruby Clock</title>
+
+  <style type="text/css">
+    html, body {
+      height: 100%;
+      overflow: auto;
+    }
+    body {
+      padding: 0;
+      margin: 0;
+      background-image: url(assets/images/silverlight_dusk1_std_1024x768.jpg);
+	  background-repeat: no-repeat; 
+	  background-color: #000000;
+    }
+    #silverlightControlHost {
+	  position: absolute;
+	  left: 100px;
+	  top: 50px;
+    }
+  </style>
+
+  <!-- Formatting for DLR error handling -->
+  <link type="text/css" rel="stylesheet" href="assets/stylesheets/error.css" />
+
+  <!-- 
+    Error handling for when DLR errors are disabled (with 
+    reportErrors=false, or not defined at all)
+  -->
+  <script type="text/javascript">
+    function onSilverlightError(sender, args) {
+      if (args.errorType == "InitializeError")  {
+        var errorDiv = document.getElementById("errorLocation");
+        if (errorDiv != null)
+          errorDiv.innerHTML = args.errorType + "- " + args.errorMessage;
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <!-- 
+    Syntax/Runtime errors from Silverlight will be displayed here.
+    This will contain debugging information and should be removed 
+    or hidden when debugging is completed 
+  -->
+  <div id='errorLocation' style="font-size: small;color: Gray;"></div>
+
+  <div id="silverlightControlHost">
+    
+    <object data="data:application/x-silverlight," type="application/x-silverlight-2" width="320" height="320">
+      <param name="source" value="app.xap"/>
+      <param name="onerror" value="onSilverlightError" />
+      <param name="background" value="#00000000" />
+      <param name="initParams" value="reportErrors=errorLocation" />
+      <param name="windowless" value="true" />
+      
+      <a href="http://go.microsoft.com/fwlink/?LinkID=124807" style="text-decoration: none;">
+          <img src="http://go.microsoft.com/fwlink/?LinkId=108181" alt="Get Microsoft Silverlight" style="border-style: none"/>
+      </a>
+    </object>
+    <iframe style='visibility:hidden;height:0;width:0;border:0px'></iframe>
+     
+  </div>
+
+</body>
+
+</html>

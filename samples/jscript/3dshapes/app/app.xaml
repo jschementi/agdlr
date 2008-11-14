@@ -1,0 +1,225 @@
+<UserControl x:Class="System.Windows.Controls.UserControl"
+  xmlns="http://schemas.microsoft.com/client/2007"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+ <Canvas x:Name="Page" Height="600" Width="800">
+
+  <Rectangle Canvas.Top="0" Canvas.Left="0" Height="600" Width="800">
+    <Rectangle.Fill>
+      <ImageBrush ImageSource="assets/images/bg.jpg"/>
+    </Rectangle.Fill>
+  </Rectangle>
+
+  <Canvas  x:Name="innerCanvas" Canvas.Left="400" Canvas.Top="300">
+    <Polygon x:Name="cube0" Fill="#FFbababa" Stroke="#FF666666" Points="0,0"/>
+    <Polygon x:Name="cube1" Fill="#FFdddddd" Stroke="#FF666666" Points="0,0"/>
+    <Polygon x:Name="cube2" Fill="#FFdddddd" Stroke="#FF666666" Points="0,0"/>
+    <Polygon x:Name="cube3" Fill="#FFdddddd" Stroke="#FF666666" Points="0,0"/>
+    <Polygon x:Name="cube4" Fill="#FFdddddd" Stroke="#FF666666" Points="0,0"/>
+    <Polygon x:Name="cube5" Fill="#FFdddddd" Stroke="#FF666666" Points="0,0"/>
+
+    <Polygon x:Name="wire0" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire1" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire2" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire3" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire4" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire5" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire6" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire7" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire8" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire9" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire10" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire11" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire12" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire13" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire14" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire15" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire16" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire17" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire18" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire19" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire20" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire21" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire22" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire23" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire24" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire25" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire26" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire27" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire28" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire29" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire30" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire31" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire32" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire33" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire34" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire35" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire36" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire37" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire38" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire39" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="wire40" Stroke="#FF999999" Points="0,0"/>
+
+    <Polygon x:Name="shade0" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade1" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade2" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade3" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade4" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade5" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade6" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade7" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade8" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade9" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade10" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade11" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade12" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade13" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade14" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade15" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade16" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade17" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade18" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade19" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade20" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade21" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade22" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade23" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade24" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade25" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade26" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade27" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade28" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade29" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade30" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade31" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade32" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade33" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade34" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade35" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade36" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade37" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade38" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade39" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+    <Polygon x:Name="shade40" Fill="#FFdddddd" Stroke="#FF999999" Points="0,0"/>
+
+  </Canvas>
+
+  <!-- BUTTON A -->
+  <Canvas x:Name="buttonArea1" >
+    <Rectangle x:Name="bt1_a" Canvas.Top="493" Canvas.Left="164" Height="73" Width="73" Opacity="0.6">
+      <Rectangle.Fill>
+        <ImageBrush ImageSource="assets/images/bt01a.png"/>
+      </Rectangle.Fill>
+    </Rectangle>
+    <Canvas.RenderTransform>
+      <TransformGroup>
+        <ScaleTransform x:Name="scale1" CenterX="200" CenterY="529" ScaleX="1" ScaleY="1"/>
+      </TransformGroup>
+    </Canvas.RenderTransform>
+  </Canvas>
+  <Rectangle x:Name="bt1_b" Canvas.Top="493" Canvas.Left="164" Height="73" Width="73" Opacity="0"  IsHitTestVisible="false">
+    <Rectangle.Fill>
+      <ImageBrush ImageSource="assets/images/bt01b.png"/>
+    </Rectangle.Fill>
+  </Rectangle>
+
+  <!-- BUTTON B -->
+  <Canvas  x:Name="buttonArea2">
+    <Rectangle x:Name="bt2_a" Canvas.Top="493" Canvas.Left="244" Height="73" Width="73" Opacity="0.6">
+      <Rectangle.Fill>
+        <ImageBrush ImageSource="assets/images/bt02a.png"/>
+      </Rectangle.Fill>
+    </Rectangle>
+    <Canvas.RenderTransform>
+      <TransformGroup>
+        <ScaleTransform x:Name="scale2" CenterX="280" CenterY="529" ScaleX="1" ScaleY="1"/>
+      </TransformGroup>
+    </Canvas.RenderTransform>
+  </Canvas>
+  <Rectangle x:Name="bt2_b" Canvas.Top="493" Canvas.Left="244" Height="73" Width="73" Opacity="0"  IsHitTestVisible="false">
+    <Rectangle.Fill>
+      <ImageBrush ImageSource="assets/images/bt02b.png"/>
+    </Rectangle.Fill>
+  </Rectangle>
+
+  <!-- BUTTON C -->
+  <Canvas  x:Name="buttonArea3">
+    <Rectangle x:Name="bt3_a" Canvas.Top="493" Canvas.Left="324" Height="73" Width="73" Opacity="0.6">
+      <Rectangle.Fill>
+        <ImageBrush ImageSource="assets/images/bt03a.png"/>
+      </Rectangle.Fill>
+    </Rectangle>
+    <Canvas.RenderTransform>
+      <TransformGroup>
+        <ScaleTransform x:Name="scale3" CenterX="360" CenterY="529" ScaleX="1" ScaleY="1"/>
+      </TransformGroup>
+    </Canvas.RenderTransform>
+  </Canvas>
+  <Rectangle x:Name="bt3_b" Canvas.Top="493" Canvas.Left="324" Height="73" Width="73" Opacity="0"  IsHitTestVisible="false">
+    <Rectangle.Fill>
+      <ImageBrush ImageSource="assets/images/bt03b.png"/>
+    </Rectangle.Fill>
+  </Rectangle>
+
+  <!-- BUTTON D -->
+  <Canvas  x:Name="buttonArea4">
+    <Rectangle x:Name="bt4_a" Canvas.Top="493" Canvas.Left="404" Height="73" Width="73" Opacity="0.6">
+      <Rectangle.Fill>
+        <ImageBrush ImageSource="assets/images/bt04a.png"/>
+      </Rectangle.Fill>
+    </Rectangle>
+    <Canvas.RenderTransform>
+      <TransformGroup>
+        <ScaleTransform x:Name="scale4" CenterX="440" CenterY="529" ScaleX="1" ScaleY="1"/>
+      </TransformGroup>
+    </Canvas.RenderTransform>
+  </Canvas>
+  <Rectangle x:Name="bt4_b" Canvas.Top="493" Canvas.Left="404" Height="73" Width="73" Opacity="0"  IsHitTestVisible="false">
+    <Rectangle.Fill>
+      <ImageBrush ImageSource="assets/images/bt04b.png"/>
+    </Rectangle.Fill>
+  </Rectangle>
+
+  <!-- BUTTON E -->
+  <Canvas  x:Name="buttonArea5">
+    <Rectangle x:Name="bt5_a" Canvas.Top="493" Canvas.Left="484" Height="73" Width="73" Opacity="0.6">
+      <Rectangle.Fill>
+        <ImageBrush ImageSource="assets/images/bt05a.png"/>
+      </Rectangle.Fill>
+    </Rectangle>
+    <Canvas.RenderTransform>
+      <TransformGroup>
+        <ScaleTransform x:Name="scale5" CenterX="520" CenterY="529" ScaleX="1" ScaleY="1"/>
+      </TransformGroup>
+    </Canvas.RenderTransform>
+  </Canvas>
+  <Rectangle x:Name="bt5_b" Canvas.Top="493" Canvas.Left="484" Height="73" Width="73" Opacity="0"  IsHitTestVisible="false">
+    <Rectangle.Fill>
+      <ImageBrush ImageSource="assets/images/bt05b.png"/>
+    </Rectangle.Fill>
+  </Rectangle>
+
+  <!-- BUTTON F -->
+  <Canvas  x:Name="buttonArea6">
+    <Rectangle x:Name="bt6_a" Canvas.Top="493" Canvas.Left="564" Height="73" Width="73" Opacity="0.6">
+      <Rectangle.Fill>
+        <ImageBrush ImageSource="assets/images/bt06a.png"/>
+      </Rectangle.Fill>
+    </Rectangle>
+    <Canvas.RenderTransform>
+      <TransformGroup>
+        <ScaleTransform x:Name="scale6" CenterX="600" CenterY="529" ScaleX="1" ScaleY="1"/>
+      </TransformGroup>
+    </Canvas.RenderTransform>
+  </Canvas>
+  <Rectangle x:Name="bt6_b" Canvas.Top="493" Canvas.Left="564" Height="73" Width="73" Opacity="0"  IsHitTestVisible="false">
+    <Rectangle.Fill>
+      <ImageBrush ImageSource="assets/images/bt06b.png"/>
+    </Rectangle.Fill>
+  </Rectangle>
+		
+  <TextBlock x:Name="Message" Canvas.Top="100" TextWrapping="Wrap" Foreground="black" />
+  
+ </Canvas>
+ 
+</UserControl>

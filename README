@@ -1,0 +1,87 @@
+README ------------------------------------------------------------------------
+  http://silverlight.net/dlr
+  http://codeplex.com/sdlsdk
+
+  "agdlr", the Silverlight Dynamic Languages project, is the integration 
+  between Silverlight and Dynamic Languages running on the Dynamic Language 
+  Runtime (DLR). The languages included in this package are IronRuby, 
+  IronPython, and Managed JScript.
+
+  Note: this package is meant to be used to develop applications with 
+  Silverlight 2 RTW. To install Silverlight, visit the following:
+
+  http://go.microsoft.com/fwlink/?linkid=124807
+
+Package -----------------------------------------------------------------------
+
+  /script:  tools for creating and running Silverlight applications
+
+  /LICENSE: Microsoft Public License
+
+  /README:  This file.
+
+  /samples: See /samples/README for more information
+
+  /src:     Source code for Microsoft.Scripting.Silverlight.dll and Chiron.exe.
+            See /src/README for more information.
+
+Getting Started ---------------------------------------------------------------
+
+  ===============================================================================
+  1. Create a new Silverlight application
+  2. Run an application
+  ===============================================================================
+  
+  1. Create a new Silverlight application
+
+    > script/sl [ruby|python|jscript] <application_name>
+
+    This will create a Silverlight application in the language of your choosing in
+    the "application_name" directory where you ran the script.
+
+    This command requires Ruby to be installed.
+      Windows:  "One-Click Installer" for Ruby: http://rubyforge.org/frs/?group_id=167
+      Mac OS X: Ships with Ruby pre-installed.
+
+  2. Run an application
+
+    > script/server /b
+
+    This will launch Chiron, the Silverlight development utility, as well as open
+    your default browser to http://localhost:2060. If you pass the /w
+    instead of the /b switch, it will just start the server and not launch your
+    browser. See the Chiron section below for more of its usage details.
+
+    Note: Place </path/to>/sdlsdk/script on your PATH to omit the "script/" from
+          these commands.
+          
+    This command requires Mono to be installed on the Mac.
+    http://www.go-mono.com/mono-downloads/download.html.
+
+Breaking Changes --------------------------------------------------------------
+
+0.4.0 
+
+  Custom Fonts: In Silverlight 2 Beta 2 a custom font could either be placed 
+  in the XAP file, or as an assembly resource, and loaded by Silverlight. 
+  In Silverlight 2 RC0, only an assembly resource is allowed. The current 
+  work-around for dynamic languages is to load a dummy DLL with the fonts as
+  resources.
+
+  JScript/Python Interop: This version breaks JScript/Python interop since
+  JScript does not support IDynamicObject, which Python uses to do dynamic 
+  method dispatch. Therefore, the sample that showed this, jscript/fractulator,
+  is not in this release.
+
+History -----------------------------------------------------------------------
+
+  March 7, 2008 -   MIX08 release for Silverlight 2; IronRuby and IronPython support
+                    for Silverlight 2 Beta 1.
+  May 6, 2008     - Adds Managed JScript to the package, as well as the "sl" command
+  June 9, 2008    - Release for Silverlight 2 Beta 2. Removes samples and source
+                    code from main project to seperate downloads on
+                    http://codeplex.com/sdlsdk.
+  June 11, 2008   - Now script/sl.bat does not depend on Ruby being installed
+  August 29, 2008 - New builds of DLR/Languages
+  Sept 29, 2008   - New builds of DLR/Languages for Silverlight 2 RC
+  Oct 15, 2008    - New builds of DLR/Languages for Silverlight 2 RTW

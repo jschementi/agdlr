@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>Silverlight 2 RTW Samples - Bubbles</title>
+		<link rel="stylesheet" type="text/css" href="assets/stylesheets/style.css" media="all" />
+   <style type="text/css">
+    html, body {
+      height: 100%;
+      overflow: auto;
+    }
+    #silverlightControlHost {
+	  position: absolute;
+	  left: 100px;
+	  top: 50px;
+    }
+  </style>
+
+  <!-- Formatting for DLR error handling -->
+  <link type="text/css" rel="stylesheet" href="assets/stylesheets/error.css" />
+ <link rel="stylesheet" type="text/css" href="assets/stylesheets/style.css" media="all" />
+  <!-- 
+    Error handling for when DLR errors are disabled (with 
+    reportErrors=false, or not defined at all)
+  -->
+  <script type="text/javascript">
+
+    function onSilverlightError(sender, args) {
+        
+            var appSource = "";
+            if (sender != null && sender != 0) {
+                appSource = sender.getHost().Source;
+            } 
+            var errorType = args.ErrorType;
+            var iErrorCode = args.ErrorCode;
+            
+            var errMsg = "Unhandled Error in Silverlight 2 Application " +  appSource + "\n" ;
+
+            errMsg += "Code: "+ iErrorCode + "    \n";
+            errMsg += "Category: " + errorType + "       \n";
+            errMsg += "Message: " + args.ErrorMessage + "     \n";
+
+            if (errorType == "ParserError")
+            {
+                errMsg += "File: " + args.xamlFile + "     \n";
+                errMsg += "Line: " + args.lineNumber + "     \n";
+                errMsg += "Position: " + args.charPosition + "     \n";
+            }
+            else if (errorType == "RuntimeError")
+            {           
+                if (args.lineNumber != 0)
+                {
+                    errMsg += "Line: " + args.lineNumber + "     \n";
+                    errMsg += "Position: " +  args.charPosition + "     \n";
+                }
+                errMsg += "MethodName: " + args.methodName + "     \n";
+            }
+
+            throw new Error(errMsg);
+        }
+  </script>
+		
+	</head>
+	<body>
+		
+ 
+<div id='errorLocation' style="font-size: small;color: Gray;"></div>
+
+  <div id="silverlightControlHost" class="host">
+    
+    <object data="data:application/x-silverlight," type="application/x-silverlight-2" width="500" height="300">
+      <param name="source" value="app.xap"/>
+      <param name="onerror" value="onSilverlightError" />
+      <param name="background" value="#00000000" />
+      <param name="initParams" value="start=app.py, debug=true" />
+      <param name="windowless" value="true" />
+     
+      
+      <a href="http://go.microsoft.com/fwlink/?LinkID=124807" style="text-decoration: none;">
+          <img src="http://go.microsoft.com/fwlink/?LinkId=108181" alt="Get Microsoft Silverlight" style="border-style: none"/>
+      </a>
+    </object>
+    <iframe style='visibility:hidden;height:0;width:0;border:0px'></iframe>
+     
+  </div>
+
+			<div id="demoControls">
+				<a href="#" onclick="startClicked(); return false;">start</a> | <a href="#" onclick="stopClicked(); return false;">stop</a>
+				# of balls: <select  id="ballselect">
+					<option value="1" >1</option>
+					<option value="8" selected>8</option>
+					<option value="16">16</option>
+					<option value="32">32</option>
+					<option value="64">64</option>
+					<option value="128">128</option>
+				</select>
+			</div>
+
+			<script type="text/javascript">
+			
+			function startClicked()
+			{
+			    //alert("bood");
+			    var sbox = document.getElementById("status");
+			    if(sbox.value=="stopped") sbox.value="start";
+			
+			}
+			 
+			 function stopClicked()
+			 {
+			    var sbox = document.getElementById("status");
+			    if(sbox.value=="started") sbox.value="stop";
+			 }
+			 
+			</script>
+			
+			<div id="vars" style="visibility:hidden;" >
+				<input id="status" value="started"  disabled="disabled"  />
+			</div>
+						
+	</body>
+</html>
