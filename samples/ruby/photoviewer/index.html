@@ -12,6 +12,8 @@
     <link type="text/css" rel="stylesheet" href="stylesheets/screen.css" />
     <!-- Formatting for Dynamic Language error window -->
     <link type="text/css" rel="stylesheet" href="stylesheets/error.css" />
+    <!-- Formatting for Dynamic Language console window -->
+    <link type="text/css" rel="stylesheet" href="stylesheets/console.css" />
     <!-- Defines "onSilverlightError" function for Silverlight plugin -->
     <script type="text/javascript" src="javascripts/error.js"></script>
 </head>
@@ -27,7 +29,7 @@
   <div id="silverlightControlHost">
 
     <!-- 
-      Silverlight 2 RC plug-in control 
+      Silverlight 2 RTW plug-in control 
       http://msdn.microsoft.com/en-us/library/cc189089(VS.95).aspx#silverlight_plug_in_configuring
     -->
     <object data="data:application/x-silverlight," type="application/x-silverlight-2" width="1" height="1">
@@ -79,10 +81,10 @@
             This is useful when debugging C#/Visual Basic when called from a 
             dynamic language.
       -->
-      <param name="initParams" value="debug=true, reportErrors=errorLocation" />
+      <param name="initParams" value="debug=true, reportErrors=errorLocation, console=true" />
         
       <!-- Handle all Silverlight errors with function defined in javascripts/error.js -->
-      <param name="onerror" value="onSilverlightError" />
+      <!-- <param name="onerror" value="onSilverlightError" /> -->
       
       <!-- 
         Other properties of the Silverlight plug-in. For documentation on this, see:

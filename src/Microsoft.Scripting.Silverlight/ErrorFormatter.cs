@@ -29,6 +29,7 @@ namespace Microsoft.Scripting.Silverlight {
 
     internal static class ErrorFormatter {
 
+        #region Error HTML Template
         // Template for generating error HTML. Parameters are:
         // 0 - message
         // 1 - source file
@@ -38,39 +39,39 @@ namespace Microsoft.Scripting.Silverlight {
         static string _ErrorHtmlTemplate = @"
 <div id=""silverlightDlrErrorReport"" class=""silverlightDlrErrorReport"">
 
-<div id=""silverlightDlrErrorWrapper"" class=""silverlightDlrErrorWrapper"">
+  <div id=""silverlightDlrErrorWrapper"" class=""silverlightDlrErrorWrapper"">
 
-  <h2 id=""silverlightDlrErrorMessage"" class=""silverlightDlrErrorMessage"">{0}</h2>
+    <h2 id=""silverlightDlrErrorMessage"" class=""silverlightDlrErrorMessage"">{0}</h2>
 
-  <div class=""silverlightDlrErrorSource"">
+    <div class=""silverlightDlrErrorSource"">
+      
+      <div id=""silverlightDlrErrorSourceFile"" class=""silverlightDlrErrorSourceFile"">{1}</div>        
+      <code id=""silverlightDlrErrorSourceCode"" class=""silverlightDlrErrorSourceCode"">{2}</code>
     
-    <div id=""silverlightDlrErrorSourceFile"" class=""silverlightDlrErrorSourceFile"">{1}</div>        
-    <code id=""silverlightDlrErrorSourceCode"" class=""silverlightDlrErrorSourceCode"">{2}</code>
-  
-  </div>  
-  
-  <div class=""silverlightDlrErrorDetails"">
+    </div>  
     
-    <div id=""silverlightDlrErrorType"" class=""silverlightDlrErrorType"">{3}</div>        
-    <code id=""silverlightDlrErrorStackTrace"" class=""silverlightDlrErrorStackTrace"">{4}</code>
+    <div class=""silverlightDlrErrorDetails"">
+      
+      <div id=""silverlightDlrErrorType"" class=""silverlightDlrErrorType"">{3}</div>        
+      <code id=""silverlightDlrErrorStackTrace"" class=""silverlightDlrErrorStackTrace"">{4}</code>
+
+    </div>
 
   </div>
 
-</div>
+  <div class=""silverlightDlrErrorMenu"" id=""silverlightDlrErrorHeader"" style=""display: none"">
+    <a href=""javascript:void(0);"" onclick=""document.getElementById('silverlightDlrErrorFooter').style.display = 'block'; document.getElementById('silverlightDlrErrorWrapper').style.display = 'block'; document.getElementById('silverlightDlrErrorHeader').style.display = 'none'; document.body.style.paddingBottom = '15px';"">&uArr; {0}</a>
+  </div>
 
-<div class=""silverlightDlrErrorMenu"" id=""silverlightDlrErrorHeader"" style=""display: none"">
-  <a href=""javascript:void(0);"" onclick=""document.getElementById('silverlightDlrErrorFooter').style.display = 'block'; document.getElementById('silverlightDlrErrorWrapper').style.display = 'block'; document.getElementById('silverlightDlrErrorHeader').style.display = 'none'; document.body.style.paddingBottom = '15px';"">&uArr; {0}</a>
-</div>
-
-<div class=""silverlightDlrErrorMenu"" id=""silverlightDlrErrorFooter"">
-  <a href=""javascript:void(0);"" onclick=""document.getElementById('silverlightDlrErrorFooter').style.display = 'none'; document.getElementById('silverlightDlrErrorWrapper').style.display = 'none'; document.getElementById('silverlightDlrErrorHeader').style.display = 'block'; document.body.style.paddingBottom = '15px';"">&dArr; Hide</a>
-</div>
+  <div class=""silverlightDlrErrorMenu"" id=""silverlightDlrErrorFooter"">
+    <a href=""javascript:void(0);"" onclick=""document.getElementById('silverlightDlrErrorFooter').style.display = 'none'; document.getElementById('silverlightDlrErrorWrapper').style.display = 'none'; document.getElementById('silverlightDlrErrorHeader').style.display = 'block'; document.body.style.paddingBottom = '15px';"">&dArr; Hide</a>
+  </div>
 
 </div>
 ";
         // template for highlighted error line, inserted into the silverlightDlrErrorSourceCode div in the template above
         const string _ErrorLineTemplate = @"<span id=""silverlightDlrErrorLine"" class=""silverlightDlrErrorLine"">{0}</span>";
-
+        #endregion
 
         static volatile bool _displayedError = false;
 
@@ -100,7 +101,7 @@ namespace Microsoft.Scripting.Silverlight {
             }
         }
 
-        private static string FormatErrorAsHtml(Exception e) {
+        internal static string FormatErrorAsHtml(Exception e) {
 
             // Get information about this exception object
             DynamicExceptionInfo err = new DynamicExceptionInfo(e);
@@ -198,7 +199,7 @@ namespace Microsoft.Scripting.Silverlight {
             return EscapeHtml(ex.StackTrace != null ? ex.StackTrace : ex.ToString());
         }
 
-        private static string EscapeHtml(string str) {
+        public static string EscapeHtml(string str) {
             return HttpUtility.HtmlEncode(str).Replace(" ", "&nbsp;").Replace("\n", "<br />");
         }
 

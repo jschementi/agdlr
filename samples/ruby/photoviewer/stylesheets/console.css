@@ -1,0 +1,37 @@
+#silverlightDlrConsole, #silverlightDlrConsoleCode, #silverlightDlrConsoleResult, .silverlightDlrConsolePrompt {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 14px;
+}
+#silverlightDlrConsoleCode, #silverlightDlrConsoleResult, .silverlightDlrConsolePrompt {
+  border: 0px;
+  line-height: 20px;
+  background-color: black;
+  color: #eee;
+}
+#silverlightDlrConsoleCode {
+  width: 90%;
+  height: 20px;
+  position: relative;
+  left: -1px; top: -1px;
+}
+#silverlightDlrConsoleRun {
+  display: none;
+}
+#silverlightDlrConsoleRunForm {
+  color: white;
+}
+.silverlightDlrConsolePrompt {
+  color: yellow;
+  float: left;
+  clear: left;
+}
+.silverlightDlrConsoleExpression {
+  margin-left: 20px;
+}
+#silverlightDlrConsole {
+  padding: 15px;
+  background-color: black;
+  height: 250px;
+  overflow: auto;
+  border: 10px solid #444;
+}

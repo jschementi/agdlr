@@ -61,6 +61,7 @@
       <HintPath>$(SilverlightInstallPath)\System.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Windows.Browser, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(SilverlightInstallPath)\System.Windows.Browser.dll</HintPath>
@@ -86,6 +87,7 @@
     <Compile Include="BrowserPAL.cs" />
     <Compile Include="BrowserScriptHost.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="Console.cs" />
     <Compile Include="DynamicApplication.cs" />
     <Compile Include="ErrorFormatter.cs" />
     <Compile Include="ExtensionTypes.cs" />

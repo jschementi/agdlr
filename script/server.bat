@@ -1,1 +1,1 @@
-"%~dp0..\bin\Chiron.exe" %*
+"%~dp0..\bin\debug\Chiron.exe" %*

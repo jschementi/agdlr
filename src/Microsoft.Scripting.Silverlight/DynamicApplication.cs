@@ -112,11 +112,16 @@ namespace Microsoft.Scripting.Silverlight {
             get { return _runtime; }
         }
 
+        internal ScriptEngine Engine {
+            get { return _engine; }
+        }
+
         #endregion
 
         #region instance variables
 
         private string _entryPoint;
+        private bool   _consoleEnabled;
         private bool   _debug;
         private bool   _exceptionDetail;
         private bool   _reportErrors;
@@ -132,12 +137,14 @@ namespace Microsoft.Scripting.Silverlight {
 
         private ScriptRuntime _runtime;
         private ScriptRuntimeSetup _runtimeSetup;
+        private ScriptEngine _engine;
 
         internal static bool InUIThread {
             get { return _UIThreadId == Thread.CurrentThread.ManagedThreadId; }
         }
 
         #endregion
+
         #region public API
 
         // these are instance methods so you can do Application.Current.TheMethod(...)
@@ -243,14 +250,17 @@ namespace Microsoft.Scripting.Silverlight {
         private void StartMainProgram() {
             string code = Package.GetEntryPointContents();
 
-            ScriptEngine engine = _runtime.GetEngineByFileExtension(Path.GetExtension(_entryPoint));
+            _engine = _runtime.GetEngineByFileExtension(Path.GetExtension(_entryPoint));
 
-            ScriptSource sourceCode = engine.CreateScriptSourceFromString(code, _entryPoint, SourceCodeKind.File);
+            ScriptSource sourceCode = _engine.CreateScriptSourceFromString(code, _entryPoint, SourceCodeKind.File);
 
             // Create a new script module & execute the code.
             // It's important to use optimized scopes,
             // which are ~4x faster on benchmarks that make heavy use of top-level functions/variables.
             sourceCode.Compile(new ErrorFormatter.Sink()).Execute();
+
+            if(_consoleEnabled)
+                Console.Show();
         }
 
 
@@ -264,6 +274,13 @@ namespace Microsoft.Scripting.Silverlight {
 
             _initParams.TryGetValue("start", out _entryPoint);
 
+            string consoleEnabled;
+            if (_initParams.TryGetValue("console", out consoleEnabled)) {
+                if (!bool.TryParse(consoleEnabled, out _consoleEnabled)) {
+                    throw new ArgumentException("You must set 'console' to 'true' or 'false', for example: initParams: \"..., console=true\"");
+                }
+            }
+            
             string debug;
             if (_initParams.TryGetValue("debug", out debug)) {
                 if (!bool.TryParse(debug, out _debug)) {
