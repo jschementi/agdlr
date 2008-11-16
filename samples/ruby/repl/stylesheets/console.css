@@ -18,8 +18,12 @@
 #silverlightDlrConsole {
   padding: 15px;
   background-color: black;
-  height: 300px;
+  bottom: 0;
   overflow: auto;
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
 }
 
 .silverlightDlrConsolePrompt {

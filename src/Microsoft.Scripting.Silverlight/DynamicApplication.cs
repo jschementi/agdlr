@@ -194,6 +194,15 @@ namespace Microsoft.Scripting.Silverlight {
             return new Uri(baseUri + relativeUri, UriKind.Relative);
         }
 
+        public static ScriptRuntimeSetup CreateRuntimeSetup() {
+            ScriptRuntimeSetup setup = Configuration.TryParseFile();
+            if (setup == null) {
+                setup = Configuration.LoadFromAssemblies(Package.GetManifestAssemblies());
+            }
+            setup.HostType = typeof(BrowserScriptHost);
+            return setup;
+        }
+
         #endregion
 
         #region implementation
@@ -219,20 +228,14 @@ namespace Microsoft.Scripting.Silverlight {
 
             ParseArguments(e.InitParams);
             
-            ScriptRuntimeSetup setup = Configuration.TryParseFile();
-            if (setup == null) {
-                setup = Configuration.LoadFromAssemblies(Package.GetManifestAssemblies());
-            }
-
-            InitializeDLR(setup);
+            InitializeDLR();
 
             StartMainProgram();
         }
 
-        private void InitializeDLR(ScriptRuntimeSetup setup) {
-            setup.HostType = typeof(BrowserScriptHost);
+        private void InitializeDLR() {
+            var setup = CreateRuntimeSetup();
             setup.DebugMode = _debug;
-
             setup.Options["SearchPaths"] = new string[] { String.Empty };
             
             _runtimeSetup = setup;

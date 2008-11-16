@@ -34,6 +34,7 @@ namespace Microsoft.Scripting.Silverlight {
         private HtmlElement      _silverlightDlrConsoleCode;
         private HtmlElement      _silverlightDlrConsoleResult;
         private HtmlElement      _silverlightDlrConsolePrompt;
+        private ScriptEngine     _engine;
         #endregion
 
         #region Console management
@@ -54,6 +55,7 @@ namespace Microsoft.Scripting.Silverlight {
             _silverlightDlrConsoleCode   = HtmlPage.Document.GetElementById(_sdlrCode);
             _silverlightDlrConsoleResult = HtmlPage.Document.GetElementById(_sdlrResult);
             _silverlightDlrConsolePrompt = HtmlPage.Document.GetElementById(_sdlrPrompt);
+            _engine = DynamicApplication.Current.Engine;
         }
 
         void Start() {
@@ -135,7 +137,7 @@ namespace Microsoft.Scripting.Silverlight {
 
         #region Running Code
         string TryExpression(string text) {
-            var props = DynamicApplication.Current.Engine.CreateScriptSourceFromString(
+            var props = _engine.CreateScriptSourceFromString(
                 text, SourceCodeKind.Expression
             ).GetCodeProperties();
             string result;
@@ -160,7 +162,7 @@ namespace Microsoft.Scripting.Silverlight {
         object DoSingleLine(bool forceExecute) {
             var valid = TryExpression(_code);
             if (valid != null) {
-                var source = DynamicApplication.Current.Engine.CreateScriptSourceFromString(_code, SourceCodeKind.Expression);
+                var source = _engine.CreateScriptSourceFromString(_code, SourceCodeKind.Expression);
                 return ExecuteCode(source);
             } else {
                 DoMultiLine(forceExecute);
@@ -171,7 +173,7 @@ namespace Microsoft.Scripting.Silverlight {
         object DoMultiLine(bool forceExecute) {
             if (forceExecute || IsComplete(_code, false)) {
                 _multiLineComplete = true;
-                var source = DynamicApplication.Current.Engine.CreateScriptSourceFromString(_code, SourceCodeKind.InteractiveCode);
+                var source = _engine.CreateScriptSourceFromString(_code, SourceCodeKind.InteractiveCode);
                 return ExecuteCode(source);
             } else {
                 _multiLine = true;
@@ -195,7 +197,7 @@ namespace Microsoft.Scripting.Silverlight {
         }
 
         bool IsComplete(string text, bool allowIncomplete) {
-            var props = DynamicApplication.Current.Engine.CreateScriptSourceFromString(
+            var props = _engine.CreateScriptSourceFromString(
                 text, SourceCodeKind.InteractiveCode
             ).GetCodeProperties();
             var result = (props != ScriptCodeParseResult.Invalid) &&
@@ -239,7 +241,11 @@ namespace Microsoft.Scripting.Silverlight {
 
         void ShowValueInResultDiv(object result) {
             var resultDiv = HtmlPage.Document.CreateElement("div");
-            resultDiv.SetProperty("innerHTML", result != null ? result.ToString() : "nil");
+            ScriptScope scope = _engine.CreateScope();
+            scope.SetVariable("sdlr_result", result);
+            result = _engine.CreateScriptSourceFromString("sdlr_result.inspect").Execute(scope);
+            var resultStr = result.ToString();
+            resultDiv.SetProperty("innerHTML", result != null ? resultStr : "nil");
             _silverlightDlrConsoleResult.AppendChild(resultDiv);
         }
   
