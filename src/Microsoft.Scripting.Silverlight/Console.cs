@@ -71,7 +71,9 @@ namespace Microsoft.Scripting.Silverlight {
                 ShowPreviousCommand();
                 break;
             case 40:
-                ShowNextCommand();
+                if (!args.ShiftKey) {
+                    ShowNextCommand();
+                }
                 break;
             };
         }

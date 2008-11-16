@@ -2,7 +2,7 @@
 #silverlightDlrConsoleCode, 
 #silverlightDlrConsoleResult, 
 .silverlightDlrConsolePrompt {
-  font-family: Consolas, "Courier New", monospace;
+  font-family: Consolas, "Andale Mono", courier, fixed, monospace;
   font-size: 16px;
 }
 
@@ -20,7 +20,6 @@
   background-color: black;
   height: 250px;
   overflow: auto;
-  border: 10px solid #444;
 }
 
 .silverlightDlrConsolePrompt {
