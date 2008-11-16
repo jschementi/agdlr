@@ -9,28 +9,31 @@ namespace Microsoft.Scripting.Silverlight {
     class Console {
         
         #region Console Html Template
-        static string _ConsoleHtmlTemplate = @"
-<div id=""silverlightDlrConsole""> 
-  <div id=""silverlightDlrConsoleResult""></div> 
-  <span id=""silverlightDlrConsolePrompt"" class=""silverlightDlrConsolePrompt""></span><form id=""SilverlightDlrConsoleRunForm"" action=""javascript:void(0)""><textarea type=""text"" rows=""1"" id=""silverlightDlrConsoleCode""></textarea><input type=""submit"" id=""silverlightDlrConsoleRun"" value=""Run"" /></form> <!-- return submitenter(this, event) --> 
-</div>";
-        private const string _sdlrCode = "silverlightDlrConsoleCode";
-        private const string _sdlrPrompt = "silverlightDlrConsolePrompt";
-        private const string _sdlrLine = "silverlightDlrConsoleLine";
-        private const string _sdlrResult = "silverlightDlrConsoleResult";
-        private const string _sdlrExpression = "silverlightDlrConsoleExpression";
+        const string _sdlr =       "silverlightDlrConsole";
+        const string _sdlrCode =   "silverlightDlrConsoleCode";
+        const string _sdlrPrompt = "silverlightDlrConsolePrompt";
+        const string _sdlrLine =   "silverlightDlrConsoleLine";
+        const string _sdlrResult = "silverlightDlrConsoleResult";
+
+        static string _ConsoleHtmlTemplate = string.Format(@"
+<div id=""{0}""> 
+  <div id=""{1}""></div> 
+  <span id=""{2}"" class=""{2}""></span><form id=""{3}"" action=""javascript:void(0)""><input type=""text"" id=""{4}"" /><input type=""submit"" id=""{5}"" value=""Run"" /></form>
+</div>", _sdlr, _sdlrResult, _sdlrPrompt, "SilverlightDlrConsoleRunForm", _sdlrCode, "silverlightDlrConsoleRun");
+        
         #endregion
 
         #region Private instance variables
-        private string _code;
-        private bool _multiLine;
-        private bool _multiLinePrompt;
-        private List<string> _history;
-        private HtmlDocument Doc = HtmlPage.Document;
-        private static Console _current;
-        private HtmlElement _silverlightDlrConsoleCode;
-        private HtmlElement _silverlightDlrConsoleResult;
-        private HtmlElement _silverlightDlrConsolePrompt;
+        private string           _code;
+        private bool             _multiLine;
+        private bool             _multiLinePrompt;
+        private bool             _multiLineComplete;
+        private List<string>     _history;
+        private int              _currentCommand = -1;
+        private static Console   _current;
+        private HtmlElement      _silverlightDlrConsoleCode;
+        private HtmlElement      _silverlightDlrConsoleResult;
+        private HtmlElement      _silverlightDlrConsolePrompt;
         #endregion
 
         #region Console management
@@ -48,15 +51,15 @@ namespace Microsoft.Scripting.Silverlight {
         }
 
         Console() {
-            _silverlightDlrConsoleCode = HtmlPage.Document.GetElementById(_sdlrCode);
+            _silverlightDlrConsoleCode   = HtmlPage.Document.GetElementById(_sdlrCode);
             _silverlightDlrConsoleResult = HtmlPage.Document.GetElementById(_sdlrResult);
             _silverlightDlrConsolePrompt = HtmlPage.Document.GetElementById(_sdlrPrompt);
         }
 
         void Start() {
             ShowDefaults();
+            ShowPrompt();
             _silverlightDlrConsoleCode.AttachEvent("onkeypress", new EventHandler<HtmlEventArgs>(OnKeyPress));
-            _silverlightDlrConsoleCode.AttachEvent("onfocus", new EventHandler<HtmlEventArgs>(OnFocus));
         }
 
         void OnKeyPress(object sender, HtmlEventArgs args) {
@@ -71,24 +74,18 @@ namespace Microsoft.Scripting.Silverlight {
             };
         }
 
-        void OnFocus(object sender, HtmlEventArgs args) {
-            if (!_multiLine) {
-                string value = Doc.GetElementById(_sdlrCode).GetProperty("value").ToString().Trim('\n');
-                HtmlPage.Window.Eval(string.Format("document.getElementById('silverlightDlrConsoleCode').value = \"{0}\"", value));
-            }
-        }
-
-        void Remember() {
+        void Remember(string line) {
             if (_history == null) {
                 _history = new List<string>();
             }
-            _history.Add(_code);
+            _history.Add(line);
         }
 
         void Reset() {
             _code = null;
             _multiLine = false;
             _multiLinePrompt = false;
+            _multiLineComplete = false;
         }
         #endregion
 
@@ -107,52 +104,46 @@ namespace Microsoft.Scripting.Silverlight {
         }
    
         void RunCode() {
-            _code = _silverlightDlrConsoleCode.GetProperty("value").ToString().Trim('\n');
-            if(_code.Split('\n').Length > 1) {
-                DoMultiLine();
-            } else {
-                DoSingleLine();
+            var line = _silverlightDlrConsoleCode.GetProperty("value").ToString();
+            if (line != string.Empty) {
+                _code = (_code == null || _code == string.Empty ? "" : _code + "\n") + line;
             }
+            object result = (_code.Split('\n').Length > 1) ? DoMultiLine() : DoSingleLine();
+
+            ShowLineAndResult(line, result);
         }
 
-        void DoSingleLine() {
+        object DoSingleLine() {
             var valid = TryExpression(_code);
             if (valid != null) {
                 var source = DynamicApplication.Current.Engine.CreateScriptSourceFromString(_code, SourceCodeKind.Expression);
-                ExecuteCode(source);
+                return ExecuteCode(source);
             } else {
                 DoMultiLine();
             }
+            return null;
         }
 
-        void DoMultiLine() {
+        object DoMultiLine() {
             if (IsComplete(_code, false)) {
+                _multiLineComplete = true;
                 var source = DynamicApplication.Current.Engine.CreateScriptSourceFromString(_code, SourceCodeKind.InteractiveCode);
-                ExecuteCode(source);
+                return ExecuteCode(source);
             } else {
                 _multiLine = true;
-                string height = _silverlightDlrConsoleCode.GetStyleAttribute("height");
-                if(height == String.Empty)
-                    height = _silverlightDlrConsoleCode.GetProperty("height").ToString();
-                height = height.ToString().TrimEnd('p', 'x');
-                _silverlightDlrConsoleCode.SetStyleAttribute("height", (Int32.Parse(height) + 20).ToString() + "px");
-                ShowPrompt();
-                _silverlightDlrConsolePrompt.SetProperty("innerHTML", SubPromptHtml());
+                _multiLineComplete = false;
             }
+            return null;
         }
 
-        void ExecuteCode(ScriptSource source) {
+        object ExecuteCode(ScriptSource source) {
             object result;
             try {
                 result = source.Compile(new ErrorFormatter.Sink()).Execute();
             } catch (Exception e) {
                 result = HandleException(e);
             }
-            ShowPrompt();
-            ShowResult(_code, result);
-            ShowDefaults();
-            Remember();
-            Reset();
+            return result;
         }
 
         string HandleException(Exception e) {
@@ -171,33 +162,48 @@ namespace Microsoft.Scripting.Silverlight {
         #endregion
 
         #region Rendering
-        void ShowResult(string code, object result) {
-            var lines = code.Split('\n');
-            var codeDivs = "";
-            foreach (string line in lines) {
-                codeDivs = codeDivs + string.Format(@"<div class=""{0}"">{1}</div>", _sdlrLine, line.Replace(" ", "&nbsp;"));
-            }
-            var output = "";
-            if (code == null || code.Length == 0) {
-                output = "<br />";
+        private void ShowLineAndResult(string line, object result) {
+            Remember(line);
+            ShowLineInResultDiv(line);
+
+            if (!_multiLine || _multiLineComplete) {
+                ShowValueInResultDiv(result);
+                ShowPrompt();
+                Reset();
             } else {
-                // TODO: Delegate to the language to format the result
-                output = string.Format(
-                    @"<div class=""{0}"">{1}</div><div>{2}</div>",
-                    _sdlrExpression, codeDivs, result != null ? result.ToString() : "nil"
-                );
+                ShowSubPrompt();
             }
-            Doc.GetElementById(_sdlrResult).SetProperty(
-                "innerHTML", 
-                Doc.GetElementById(_sdlrResult).GetProperty("innerHTML") + output
-            );
+
+            ShowDefaults();
+        }
+
+        void ShowSubPrompt() {
+            _silverlightDlrConsolePrompt.SetProperty("innerHTML", SubPromptHtml());
+        }
+
+        void ShowPrompt() {
+            _silverlightDlrConsolePrompt.SetProperty("innerHTML", PromptHtml());
+        }
+
+        void ShowLineInResultDiv(string line) {
+            ShowPromptInResultDiv();
+            var lineDiv = HtmlPage.Document.CreateElement("div");
+            lineDiv.CssClass = _sdlrLine;
+            lineDiv.SetProperty("innerHTML", line.Replace(" ", "&nbsp;"));
+            _silverlightDlrConsoleResult.AppendChild(lineDiv);
+        }
+
+        void ShowValueInResultDiv(object result) {
+            var resultDiv = HtmlPage.Document.CreateElement("div");
+            resultDiv.SetProperty("innerHTML", result != null ? result.ToString() : "nil");
+            _silverlightDlrConsoleResult.AppendChild(resultDiv);
         }
   
-        void ShowPrompt() {
-            HtmlElement prompt = HtmlPage.Document.CreateElement("div");
+        void ShowPromptInResultDiv() {
+            HtmlElement prompt = HtmlPage.Document.CreateElement("span");
             prompt.SetAttribute("class", _sdlrPrompt);
             prompt.SetProperty("innerHTML", _multiLinePrompt ? SubPromptHtml() : PromptHtml());
-            Doc.GetElementById(_sdlrResult).AppendChild(prompt);
+            _silverlightDlrConsoleResult.AppendChild(prompt);
             if (_multiLine)
                 _multiLinePrompt = true;
         }
@@ -217,9 +223,6 @@ namespace Microsoft.Scripting.Silverlight {
             _silverlightDlrConsoleCode.SetProperty("value", "");
             _silverlightDlrConsolePrompt.Focus();
             _silverlightDlrConsoleCode.Focus();
-            _silverlightDlrConsolePrompt.SetProperty("innerHTML", PromptHtml());
-            _silverlightDlrConsoleCode.SetStyleAttribute("height", "20px");
-            _silverlightDlrConsoleCode.SetProperty("rows", "1");
         }
         #endregion
     }
