@@ -65,11 +65,13 @@ namespace Microsoft.Scripting.Silverlight {
         void OnKeyPress(object sender, HtmlEventArgs args) {
             switch(args.CharacterCode) {
             case 13:
-                RunCode();
+                RunCode(args.CtrlKey);
                 break;
             case 38:
+                ShowPreviousCommand();
                 break;
             case 40:
+                ShowNextCommand();
                 break;
             };
         }
@@ -89,6 +91,46 @@ namespace Microsoft.Scripting.Silverlight {
         }
         #endregion
 
+        #region History
+        int CurrentCommand {
+            get {
+                if (_history == null) {
+                    _currentCommand = -1;
+                } else if(_currentCommand == -1) {
+                    _currentCommand = _history.Count != 0 ? _history.Count - 1 : 0;
+                }
+                return _currentCommand;
+            }
+            set {
+                if (_history == null) {
+                    _currentCommand = -1;
+                } else if (value < 0) {
+                    _currentCommand = 0;
+                } else if (value > _history.Count - 1) {
+                    _currentCommand = _history.Count - 1;
+                } else {
+                    _currentCommand = value;
+                }
+            }
+        }
+
+        string TryGetFromHistory(int index) {
+            if (_history == null)
+                return "";
+            return _history[index];
+        }
+
+        string GetNextCommand() {
+            CurrentCommand++;
+            return TryGetFromHistory(CurrentCommand); 
+        }
+
+        string GetPreviousCommand() {
+            --CurrentCommand;
+            return TryGetFromHistory(CurrentCommand);
+        }
+        #endregion
+
         #region Running Code
         string TryExpression(string text) {
             var props = DynamicApplication.Current.Engine.CreateScriptSourceFromString(
@@ -103,29 +145,29 @@ namespace Microsoft.Scripting.Silverlight {
             return result;
         }
    
-        void RunCode() {
+        void RunCode(bool forceExecute) {
             var line = _silverlightDlrConsoleCode.GetProperty("value").ToString();
             if (line != string.Empty) {
                 _code = (_code == null || _code == string.Empty ? "" : _code + "\n") + line;
             }
-            object result = (_code.Split('\n').Length > 1) ? DoMultiLine() : DoSingleLine();
+            object result = (_code.Split('\n').Length > 1) ? DoMultiLine(forceExecute) : DoSingleLine(forceExecute);
 
             ShowLineAndResult(line, result);
         }
 
-        object DoSingleLine() {
+        object DoSingleLine(bool forceExecute) {
             var valid = TryExpression(_code);
             if (valid != null) {
                 var source = DynamicApplication.Current.Engine.CreateScriptSourceFromString(_code, SourceCodeKind.Expression);
                 return ExecuteCode(source);
             } else {
-                DoMultiLine();
+                DoMultiLine(forceExecute);
             }
             return null;
         }
 
-        object DoMultiLine() {
-            if (IsComplete(_code, false)) {
+        object DoMultiLine(bool forceExecute) {
+            if (forceExecute || IsComplete(_code, false)) {
                 _multiLineComplete = true;
                 var source = DynamicApplication.Current.Engine.CreateScriptSourceFromString(_code, SourceCodeKind.InteractiveCode);
                 return ExecuteCode(source);
@@ -223,6 +265,14 @@ namespace Microsoft.Scripting.Silverlight {
             _silverlightDlrConsoleCode.SetProperty("value", "");
             _silverlightDlrConsolePrompt.Focus();
             _silverlightDlrConsoleCode.Focus();
+        }
+
+        void ShowNextCommand() {
+            _silverlightDlrConsoleCode.SetProperty("value", GetNextCommand());
+        }
+
+        void ShowPreviousCommand() {
+            _silverlightDlrConsoleCode.SetProperty("value", GetPreviousCommand());
         }
         #endregion
     }
