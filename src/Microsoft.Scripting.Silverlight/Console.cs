@@ -77,6 +77,9 @@ namespace Microsoft.Scripting.Silverlight {
                     ShowNextCommand();
                 }
                 break;
+            default:
+                _currentCommand = _history.Count;
+                break;
             };
         }
 
