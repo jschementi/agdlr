@@ -261,7 +261,7 @@ namespace Microsoft.Scripting.Silverlight {
                 }
 
                 ScriptEngine engine;
-                if (_sourceFileName != null &&
+                if (_sourceFileName != null && _sourceFileName.IndexOfAny(System.IO.Path.GetInvalidPathChars()) == -1 &&
                     DynamicApplication.Current.Runtime.TryGetEngineByFileExtension(System.IO.Path.GetExtension(_sourceFileName), out engine)) {
                     ExceptionOperations es = engine.GetService<ExceptionOperations>();
                     es.GetExceptionMessage(_exception, out _message, out _errorTypeName);
