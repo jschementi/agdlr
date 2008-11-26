@@ -34,9 +34,6 @@ namespace Microsoft.Scripting.Silverlight {
         internal static readonly BrowserPAL/*!*/ PAL = new BrowserPAL();
         
         public override bool FileExists(string path) {
-            if (!DynamicApplication.InUIThread) {
-                return false; // Application.GetResourceStream will throw if called from a non-UI thread
-            }
             return Package.GetFile(path) != null;
         }
 
