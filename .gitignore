@@ -1,0 +1,5 @@
+bin
+src/*/obj
+*.suo
+repros
+.*.swp
