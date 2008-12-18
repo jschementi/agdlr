@@ -16,7 +16,7 @@
 using System;
 using System.IO;
 using System.Reflection;
-using System.Scripting;
+using Microsoft.Scripting;
 using System.Windows;
 
 namespace Microsoft.Scripting.Silverlight {

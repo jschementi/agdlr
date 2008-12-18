@@ -1,6 +1,6 @@
 [submodule "test/Dependencies/slut"]
-	path = test/Dependencies/slut
-	url = git@github.com:jschementi/slut.git
+	path = test/Dependencies/silverlightut
+	url = git@github.com:jschementi/silverlightut.git
 [submodule "test/Dependencies/mocha"]
 	path = test/Dependencies/mocha
 	url = git@github.com:jschementi/mocha.git

@@ -255,15 +255,15 @@ namespace Microsoft.Scripting.Silverlight {
 
             _engine = _runtime.GetEngineByFileExtension(Path.GetExtension(_entryPoint));
 
+            if (_consoleEnabled)
+                Console.Show();
+
             ScriptSource sourceCode = _engine.CreateScriptSourceFromString(code, _entryPoint, SourceCodeKind.File);
 
             // Create a new script module & execute the code.
             // It's important to use optimized scopes,
             // which are ~4x faster on benchmarks that make heavy use of top-level functions/variables.
             sourceCode.Compile(new ErrorFormatter.Sink()).Execute();
-
-            if(_consoleEnabled)
-                Console.Show();
         }
 
 

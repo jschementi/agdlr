@@ -16,9 +16,9 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Scripting;
 using System.Text;
 using System.Windows.Browser;
+using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
 using Microsoft.Scripting.Runtime;
 using Microsoft.Scripting.Utils;
