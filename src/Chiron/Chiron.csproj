@@ -76,8 +76,7 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>xcopy $(ProjectDir)..\Dependencies\IronRuby* $(TargetDir) /Y
-xcopy $(ProjectDir)..\Dependencies\IronPython* $(TargetDir) /Y
-xcopy $(ProjectDir)..\Dependencies\*JScript* $(TargetDir) /Y</PostBuildEvent>
+xcopy $(ProjectDir)..\Dependencies\IronPython* $(TargetDir) /Y</PostBuildEvent>
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
