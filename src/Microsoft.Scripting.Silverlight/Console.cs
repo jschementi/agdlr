@@ -9,20 +9,21 @@ namespace Microsoft.Scripting.Silverlight {
     public class Console {
         
         #region Console Html Template
-        private const string _sdlr =       "silverlightDlrConsole";
-        private const string _sdlrCode =   "silverlightDlrConsoleCode";
-        private const string _sdlrPrompt = "silverlightDlrConsolePrompt";
-        private const string _sdlrLine =   "silverlightDlrConsoleLine";
-        private const string _sdlrOutput = "silverlightDlrConsoleOutput";
-        private const string _sdlrValue =  "silverlightDlrConsoleValue";
-        private const string _sdlrResult = "silverlightDlrConsoleResult";
+        private const string _sdlr        = "silverlightDlrConsole";
+        private const string _sdlrCode    = "silverlightDlrConsoleCode";
+        private const string _sdlrPrompt  = "silverlightDlrConsolePrompt";
+        private const string _sdlrLine    = "silverlightDlrConsoleLine";
+        private const string _sdlrOutput  = "silverlightDlrConsoleOutput";
+        private const string _sdlrValue   = "silverlightDlrConsoleValue";
+        private const string _sdlrResult  = "silverlightDlrConsoleResult";
+        private const string _sdlrRunForm = "silverlightDlrConsoleRunForm";
+        private const string _sdlrRun     = "silverlightDlrConsoleRun";
 
         private static string _ConsoleHtmlTemplate = string.Format(@"
 <div id=""{0}""> 
   <div id=""{1}""></div> 
   <span id=""{2}"" class=""{2}""></span><form id=""{3}"" action=""javascript:void(0)""><input type=""text"" id=""{4}"" /><input type=""submit"" id=""{5}"" value=""Run"" /></form>
-</div>", _sdlr, _sdlrResult, _sdlrPrompt, "SilverlightDlrConsoleRunForm", _sdlrCode, "silverlightDlrConsoleRun");
-        
+</div>", _sdlr, _sdlrResult, _sdlrPrompt, _sdlrRunForm, _sdlrCode, _sdlrRun);
         #endregion
 
         #region Private fields
@@ -290,7 +291,7 @@ namespace Microsoft.Scripting.Silverlight {
             ShowPromptInResultDiv();
             _output_buffer.ElementClass = _sdlrLine;
             _output_buffer.ElementName = "div";
-            _output_buffer.Write(codeLine.Replace(" ", "&nbsp;"));
+            _output_buffer.Write(codeLine);
             _output_buffer.Reset();
         }
 
@@ -351,7 +352,7 @@ namespace Microsoft.Scripting.Silverlight {
             if (ElementName == null) {
                 _queue += str;
             } else {
-                _results.AppendChild(PutTextInNewElement(str, ElementName, ElementClass));
+                _results.AppendChild(PutTextInNewElement(TextToHtml(str), ElementName, ElementClass));
             }
         }
 
@@ -362,9 +363,13 @@ namespace Microsoft.Scripting.Silverlight {
 
         public override void Flush() {
             if (_queue != null) {
-                _results.AppendChild(PutTextInNewElement(_queue.Replace(CoreNewLine[0].ToString(), "<br />"), "div", _outputClass));
+                _results.AppendChild(PutTextInNewElement(TextToHtml(_queue), "div", _outputClass));
                 _queue = null;
             }
+        }
+
+        public static string TextToHtml(string text) {
+            return text.Replace("\t", "  ").Replace(" ", "&nbsp;").Replace((new ConsoleWriter()).NewLine, "<br />");
         }
 
         #region HTML Helpers
