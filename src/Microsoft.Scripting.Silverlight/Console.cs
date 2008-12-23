@@ -34,8 +34,8 @@ namespace Microsoft.Scripting.Silverlight {
         private List<string>        _history;
         private int                 _currentCommand = -1;
         private static Console      _current;
-        private ConsoleOutputBuffer _output_buffer;
-        private ConsoleInputBuffer  _input_buffer;
+        private ConsoleOutputBuffer _outputBuffer;
+        private ConsoleInputBuffer  _inputBuffer;
         private HtmlElement         _silverlightDlrConsoleCode;
         private HtmlElement         _silverlightDlrConsoleResult;
         private HtmlElement         _silverlightDlrConsolePrompt;
@@ -44,11 +44,11 @@ namespace Microsoft.Scripting.Silverlight {
 
         #region Public properties
         public ConsoleInputBuffer InputBuffer {
-            get { return _input_buffer; }
+            get { return _inputBuffer; }
         }
 
         public ConsoleOutputBuffer OutputBuffer {
-            get { return _output_buffer; }
+            get { return _outputBuffer; }
         }
 
         public static Console Current {
@@ -82,8 +82,8 @@ namespace Microsoft.Scripting.Silverlight {
         }
 
         private void Start() {
-            _input_buffer = new ConsoleInputBuffer(_current);
-            _output_buffer = new ConsoleOutputBuffer(_silverlightDlrConsoleResult, _sdlrOutput);
+            _inputBuffer = new ConsoleInputBuffer(_current);
+            _outputBuffer = new ConsoleOutputBuffer(_silverlightDlrConsoleResult, _sdlrOutput);
             ShowDefaults();
             ShowPrompt();
             _silverlightDlrConsoleCode.AttachEvent("onkeypress", new EventHandler<HtmlEventArgs>(OnKeyPress));
@@ -185,9 +185,11 @@ namespace Microsoft.Scripting.Silverlight {
             if (line != string.Empty) {
                 _code = (_code == null || _code == string.Empty ? "" : _code + "\n") + line;
             }
-            object result = (_code.Split('\n').Length > 1) ? DoMultiLine(forceExecute) : DoSingleLine(forceExecute);
+            if (_code != null) {
+                object result = (_code.Split('\n').Length > 1) ? DoMultiLine(forceExecute) : DoSingleLine(forceExecute);
 
-            ShowLineAndResult(line, result);
+                ShowLineAndResult(line, result);
+            }
         }
 
         private object DoSingleLine(bool forceExecute) {
@@ -218,13 +220,28 @@ namespace Microsoft.Scripting.Silverlight {
             try {
                 result = source.Compile(new ErrorFormatter.Sink()).Execute();
             } catch (Exception e) {
-                result = HandleException(e);
+                HandleException(e);
+                result = null;
             }
             return result;
         }
 
-        private string HandleException(Exception e) {
-            return string.Format(@"<div>{0}</div>", e.Message);
+        private void HandleException(Exception e) {
+            var de = new ErrorFormatter.DynamicExceptionInfo(e);
+            
+            _outputBuffer.WriteLine("");
+            _outputBuffer.WriteLine(de.Message);
+
+            foreach(var frame in de.DynamicStackFrames) {
+                _outputBuffer.WriteLine("  at {0} in {1}, line {2}",
+                    frame.GetMethodName(),
+                    frame.GetFileName() != null ? frame.GetFileName() : null,
+                    frame.GetFileLineNumber()
+                );
+            }
+
+            _outputBuffer.WriteLine("CLR Stack Trace:");
+            _outputBuffer.WriteLine(e.StackTrace != null ? e.StackTrace : e.ToString());
         }
 
         public bool IsComplete(string text, bool allowIncomplete) {
@@ -270,11 +287,11 @@ namespace Microsoft.Scripting.Silverlight {
 
         #region Prompt
         internal void ShowSubPrompt() {
-            _output_buffer.PutTextInElement(SubPromptHtml(), _silverlightDlrConsolePrompt);
+            _outputBuffer.PutTextInElement(SubPromptHtml(), _silverlightDlrConsolePrompt);
         }
 
         internal void ShowPrompt() {
-            _output_buffer.PutTextInElement(PromptHtml(), _silverlightDlrConsolePrompt);
+            _outputBuffer.PutTextInElement(PromptHtml(), _silverlightDlrConsolePrompt);
         }
 
         internal string PromptHtml() {
@@ -289,17 +306,17 @@ namespace Microsoft.Scripting.Silverlight {
         #region Pushing stuff into Result Div
         internal void ShowCodeLineInResultDiv(string codeLine) {
             ShowPromptInResultDiv();
-            _output_buffer.ElementClass = _sdlrLine;
-            _output_buffer.ElementName = "div";
-            _output_buffer.Write(codeLine);
-            _output_buffer.Reset();
+            _outputBuffer.ElementClass = _sdlrLine;
+            _outputBuffer.ElementName = "div";
+            _outputBuffer.Write(codeLine);
+            _outputBuffer.Reset();
         }
 
         internal void ShowPromptInResultDiv() {
-            _output_buffer.ElementClass = _sdlrPrompt;
-            _output_buffer.ElementName = "span";
-            _output_buffer.Write(_multiLinePrompt ? SubPromptHtml() : PromptHtml());
-            _output_buffer.Reset();
+            _outputBuffer.ElementClass = _sdlrPrompt;
+            _outputBuffer.ElementName = "span";
+            _outputBuffer.Write(_multiLinePrompt ? SubPromptHtml() : PromptHtml());
+            _outputBuffer.Reset();
             if (_multiLine) {
                 _multiLinePrompt = true;
             }
@@ -309,14 +326,14 @@ namespace Microsoft.Scripting.Silverlight {
             ScriptScope scope = _engine.CreateScope();
             scope.SetVariable("sdlr_result", result);
             var resultStr = _engine.CreateScriptSourceFromString("sdlr_result.inspect").Execute(scope).ToString();
-            _output_buffer.ElementClass = _sdlrValue;
-            _output_buffer.ElementName = "div";
-            _output_buffer.Write("=> " + (result != null ? resultStr : "nil"));
-            _output_buffer.Reset();
+            _outputBuffer.ElementClass = _sdlrValue;
+            _outputBuffer.ElementName = "div";
+            _outputBuffer.Write("=> " + (result != null ? resultStr : "nil"));
+            _outputBuffer.Reset();
         }
 
         internal void FlushOutputInResultDiv() {
-            _output_buffer.Flush();
+            _outputBuffer.Flush();
         }
         #endregion
 
@@ -418,6 +435,9 @@ namespace Microsoft.Scripting.Silverlight {
             CoreNewLine = new char[] { '\n' };
         }
         public override Encoding Encoding { get { return _encoding; } }
+        public override void WriteLine(string str) {
+            Write(str + "\n");
+        }
     }
     #endregion
 }

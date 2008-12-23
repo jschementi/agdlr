@@ -213,7 +213,7 @@ namespace Microsoft.Scripting.Silverlight {
         /// Utility class to encapsulate all of the information we retrieve, starting from
         /// the Exception object.
         /// </summary>
-        private class DynamicExceptionInfo {
+        public class DynamicExceptionInfo {
             public Exception Exception {
                 get { return _exception; }
             }
