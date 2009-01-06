@@ -1,12 +1,7 @@
-[submodule "test/Dependencies/slut"]
-	path = test/Dependencies/silverlightut
-	url = git@github.com:jschementi/silverlightut.git
-[submodule "test/Dependencies/mocha"]
-	path = test/Dependencies/mocha
+[submodule "test/runner/lib/mocha"]
+	path = test/runner/lib/mocha
 	url = git@github.com:jschementi/mocha.git
-[submodule "test/Dependencies/bacon"]
-	path = test/Dependencies/bacon
+[submodule "test/runner/lib/bacon"]
+	path = test/runner/lib/bacon
 	url = git@github.com:jschementi/bacon.git
-[submodule "test/Dependencies/orphanage"]
-	path = test/Dependencies/orphanage
-	url = git@github.com:jschementi/orphanage.git
+
