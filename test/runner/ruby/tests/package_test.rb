@@ -57,7 +57,6 @@ module ArbitraryModuleSoConsoleDoesNotConflict
         "Microsoft.Scripting",
         "IronRuby",
         "IronRuby.Libraries",
-        "System.Xml.Linq"
       ].sort
   
       assemblies = Package.get_manifest_assemblies.collect do |a|
