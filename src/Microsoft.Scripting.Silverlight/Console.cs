@@ -295,11 +295,11 @@ namespace Microsoft.Scripting.Silverlight {
         }
 
         internal string PromptHtml() {
-            return String.Format("{0}&gt;&nbsp;", _engine.Setup.FileExtensions[0].Substring(1));
+            return String.Format("{0}> ", _engine.Setup.FileExtensions[0].Substring(1));
         }
 
         internal string SubPromptHtml() {
-            return "&nbsp;&nbsp;|&nbsp;";
+            return "  | ";
         }
         #endregion
 
@@ -369,7 +369,7 @@ namespace Microsoft.Scripting.Silverlight {
             if (ElementName == null) {
                 _queue += str;
             } else {
-                _results.AppendChild(PutTextInNewElement(TextToHtml(str), ElementName, ElementClass));
+                _results.AppendChild(PutTextInNewElement(str, ElementName, ElementClass));
             }
         }
 
@@ -380,13 +380,20 @@ namespace Microsoft.Scripting.Silverlight {
 
         public override void Flush() {
             if (_queue != null) {
-                _results.AppendChild(PutTextInNewElement(TextToHtml(_queue), "div", _outputClass));
+                _results.AppendChild(PutTextInNewElement(_queue, "div", _outputClass));
                 _queue = null;
             }
         }
 
+        // TODO any library I can use to do this?
         public static string TextToHtml(string text) {
-            return text.Replace("\t", "  ").Replace(" ", "&nbsp;").Replace((new ConsoleWriter()).NewLine, "<br />");
+            return text.Replace("\t", "  ").
+                Replace("&", "&amp;").
+                Replace(" ", "&nbsp;").
+                Replace("<", "&lt;").
+                Replace(">", "&gt;").
+                Replace("\"", "&quot;").
+                Replace((new ConsoleWriter()).NewLine, "<br />");
         }
 
         #region HTML Helpers
@@ -400,12 +407,12 @@ namespace Microsoft.Scripting.Silverlight {
         }
 
         internal void PutTextInElement(string str, HtmlElement e) {
-            e.SetProperty("innerHTML", str);
+            e.SetProperty("innerHTML", TextToHtml(str));
         }
 
         internal void AppendTextInElement(string str, HtmlElement e) {
             var toPrepend = e.GetProperty("innerHTML").ToString();
-            e.SetProperty("innerHTML", toPrepend + str);
+            e.SetProperty("innerHTML", toPrepend + TextToHtml(str));
         }
         #endregion
     }

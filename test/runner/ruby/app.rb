@@ -57,6 +57,7 @@ $test_files = %W(
   dynamic_application
   extension_types
   package
+  console
 )
 
 def run_test(test)
