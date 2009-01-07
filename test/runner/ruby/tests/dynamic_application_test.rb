@@ -83,7 +83,7 @@ describe 'Hosting API' do
 end
 
 describe 'Utility methods' do
-  it 'should make a relateive Uri' do
+  it 'should make a relative Uri' do
     uri = "tests/assets/foo.xaml"
     DynamicApplication.current.make_uri(uri).should.equal System::Uri.new(uri, System::UriKind.relative)
   end

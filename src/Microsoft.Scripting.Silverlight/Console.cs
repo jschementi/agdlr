@@ -385,8 +385,9 @@ namespace Microsoft.Scripting.Silverlight {
             }
         }
 
+        #region HTML Helpers
         // TODO any library I can use to do this?
-        public static string TextToHtml(string text) {
+        private static string EscapeHtml(string text) {
             return text.Replace("\t", "  ").
                 Replace("&", "&amp;").
                 Replace(" ", "&nbsp;").
@@ -396,7 +397,6 @@ namespace Microsoft.Scripting.Silverlight {
                 Replace((new ConsoleWriter()).NewLine, "<br />");
         }
 
-        #region HTML Helpers
         private HtmlElement PutTextInNewElement(string str, string tagName, string className) {
             var element = HtmlPage.Document.CreateElement(tagName == null ? "div" : tagName);
             if (className != null) {
@@ -407,12 +407,12 @@ namespace Microsoft.Scripting.Silverlight {
         }
 
         internal void PutTextInElement(string str, HtmlElement e) {
-            e.SetProperty("innerHTML", TextToHtml(str));
+            e.SetProperty("innerHTML", EscapeHtml(str));
         }
 
         internal void AppendTextInElement(string str, HtmlElement e) {
             var toPrepend = e.GetProperty("innerHTML").ToString();
-            e.SetProperty("innerHTML", toPrepend + TextToHtml(str));
+            e.SetProperty("innerHTML", toPrepend + EscapeHtml(str));
         }
         #endregion
     }
