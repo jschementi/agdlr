@@ -88,12 +88,13 @@
     <Compile Include="BrowserPAL.cs" />
     <Compile Include="BrowserScriptHost.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="Console.cs" />
+    <Compile Include="Repl.cs" />
     <Compile Include="DynamicApplication.cs" />
     <Compile Include="ErrorFormatter.cs" />
     <Compile Include="ExtensionTypes.cs" />
     <Compile Include="Package.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Window.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" Condition=" '$(SilverlightTreeBuild)' != 'true' " />
   <Import Project="..\..\..\silverlight.build.targets" Condition=" '$(SilverlightTreeBuild)' == 'true' " />

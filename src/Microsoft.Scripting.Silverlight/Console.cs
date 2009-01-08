@@ -1,4 +1,19 @@
-﻿using System;
+﻿/* ****************************************************************************
+ *
+ * Copyright (c) Microsoft Corporation. 
+ *
+ * This source code is subject to terms and conditions of the Microsoft Public License. A 
+ * copy of the license can be found in the License.html file at the root of this distribution. If 
+ * you cannot locate the  Microsoft Public License, please send an email to 
+ * dlr@microsoft.com. By using this source code in any fashion, you are agreeing to be bound 
+ * by the terms of the Microsoft Public License.
+ *
+ * You must not remove this notice, or any other, from this software.
+ *
+ *
+ * ***************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Browser;
@@ -9,21 +24,25 @@ namespace Microsoft.Scripting.Silverlight {
     public class Console {
         
         #region Console Html Template
-        private const string _sdlr        = "silverlightDlrConsole";
-        private const string _sdlrCode    = "silverlightDlrConsoleCode";
-        private const string _sdlrPrompt  = "silverlightDlrConsolePrompt";
-        private const string _sdlrLine    = "silverlightDlrConsoleLine";
-        private const string _sdlrOutput  = "silverlightDlrConsoleOutput";
-        private const string _sdlrValue   = "silverlightDlrConsoleValue";
-        private const string _sdlrResult  = "silverlightDlrConsoleResult";
-        private const string _sdlrRunForm = "silverlightDlrConsoleRunForm";
-        private const string _sdlrRun     = "silverlightDlrConsoleRun";
+        private const string _sdlr        = "silverlightDlrRepl";
+        private const string _sdlrCode    = "silverlightDlrReplCode";
+        private const string _sdlrPrompt  = "silverlightDlrReplPrompt";
+        private const string _sdlrLine    = "silverlightDlrReplLine";
+        private const string _sdlrOutput  = "silverlightDlrReplOutput";
+        private const string _sdlrValue   = "silverlightDlrReplValue";
+        private const string _sdlrResult  = "silverlightDlrReplResult";
+        private const string _sdlrRunForm = "silverlightDlrReplRunForm";
+        private const string _sdlrRun     = "silverlightDlrReplRun";
 
-        private static string _ConsoleHtmlTemplate = string.Format(@"
-<div id=""{0}""> 
-  <div id=""{1}""></div> 
-  <span id=""{2}"" class=""{2}""></span><form id=""{3}"" action=""javascript:void(0)""><input type=""text"" id=""{4}"" /><input type=""submit"" id=""{5}"" value=""Run"" /></form>
-</div>", _sdlr, _sdlrResult, _sdlrPrompt, _sdlrRunForm, _sdlrCode, _sdlrRun);
+        // 0 - result id
+        // 1 - prompt id/class
+        // 2 - run form id
+        // 3 - code input id
+        // 4 - run id
+        private static string _replHtmlTemplate = string.Format(@"
+  <div id=""{0}""></div> 
+  <span id=""{1}"" class=""{1}""></span><form id=""{2}"" action=""javascript:void(0)""><input type=""text"" id=""{3}"" /><input type=""submit"" id=""{4}"" value=""Run"" /></form>
+", _sdlrResult, _sdlrPrompt, _sdlrRunForm, _sdlrCode, _sdlrRun);
         #endregion
 
         #region Private fields
@@ -33,21 +52,21 @@ namespace Microsoft.Scripting.Silverlight {
         private bool                _multiLineComplete;
         private List<string>        _history;
         private int                 _currentCommand = -1;
-        private static Console      _current;
-        private ConsoleOutputBuffer _outputBuffer;
-        private ConsoleInputBuffer  _inputBuffer;
-        private HtmlElement         _silverlightDlrConsoleCode;
-        private HtmlElement         _silverlightDlrConsoleResult;
-        private HtmlElement         _silverlightDlrConsolePrompt;
+        private static Console         _current;
+        private ReplOutputBuffer    _outputBuffer;
+        private ReplInputBuffer     _inputBuffer;
+        private HtmlElement         _silverlightDlrReplCode;
+        private HtmlElement         _silverlightDlrReplResult;
+        private HtmlElement         _silverlightDlrReplPrompt;
         private ScriptEngine        _engine;
         #endregion
 
         #region Public properties
-        public ConsoleInputBuffer InputBuffer {
+        public ReplInputBuffer InputBuffer {
             get { return _inputBuffer; }
         }
 
-        public ConsoleOutputBuffer OutputBuffer {
+        public ReplOutputBuffer OutputBuffer {
             get { return _outputBuffer; }
         }
 
@@ -66,27 +85,41 @@ namespace Microsoft.Scripting.Silverlight {
 
         public static void Show(ScriptEngine engine) {
             if (_current == null) {
-                var div = HtmlPage.Document.CreateElement("div");
-                div.SetProperty("innerHTML", _ConsoleHtmlTemplate);
-                HtmlPage.Document.Body.AppendChild(div);
-                _current = new Console(engine);
-                _current.Start();
+                Window.Show(DynamicApplication.Current.ErrorTargetID);
+                Window.Current.AddPanel(engine.Setup.DisplayName + " Console", Create(engine));
+                Window.Current.Initialize();
+                Console.Current.Start();
             }
         }
 
+        public static HtmlElement Create() {
+            return Create(DynamicApplication.Current.Engine);
+        }
+
+        public static HtmlElement Create(ScriptEngine engine) {
+            HtmlElement replDiv = null;
+            if (_current == null) {
+                replDiv = HtmlPage.Document.CreateElement("div");
+                replDiv.Id = _sdlr;
+                replDiv.SetProperty("innerHTML", _replHtmlTemplate);
+                _current = new Console(engine);
+            }
+            return replDiv;
+        }
+
         private Console(ScriptEngine engine) {
-            _silverlightDlrConsoleCode   = HtmlPage.Document.GetElementById(_sdlrCode);
-            _silverlightDlrConsoleResult = HtmlPage.Document.GetElementById(_sdlrResult);
-            _silverlightDlrConsolePrompt = HtmlPage.Document.GetElementById(_sdlrPrompt);
             _engine = engine;
         }
 
-        private void Start() {
-            _inputBuffer = new ConsoleInputBuffer(_current);
-            _outputBuffer = new ConsoleOutputBuffer(_silverlightDlrConsoleResult, _sdlrOutput);
+        public void Start() {
+            _silverlightDlrReplCode = HtmlPage.Document.GetElementById(_sdlrCode);
+            _silverlightDlrReplResult = HtmlPage.Document.GetElementById(_sdlrResult);
+            _silverlightDlrReplPrompt = HtmlPage.Document.GetElementById(_sdlrPrompt);
+            _inputBuffer = new ReplInputBuffer(_current);
+            _outputBuffer = new ReplOutputBuffer(_silverlightDlrReplResult, _sdlrOutput);
             ShowDefaults();
             ShowPrompt();
-            _silverlightDlrConsoleCode.AttachEvent("onkeypress", new EventHandler<HtmlEventArgs>(OnKeyPress));
+            _silverlightDlrReplCode.AttachEvent("onkeypress", new EventHandler<HtmlEventArgs>(OnKeyPress));
         }
 
         private void OnKeyPress(object sender, HtmlEventArgs args) {
@@ -181,7 +214,7 @@ namespace Microsoft.Scripting.Silverlight {
             RunCode(false);
         }
         public void RunCode(bool forceExecute) {
-            var line = _silverlightDlrConsoleCode.GetProperty("value").ToString();
+            var line = _silverlightDlrReplCode.GetProperty("value").ToString();
             if (line != string.Empty) {
                 _code = (_code == null || _code == string.Empty ? "" : _code + "\n") + line;
             }
@@ -273,9 +306,9 @@ namespace Microsoft.Scripting.Silverlight {
         }
 
         internal void ShowDefaults() {
-            _silverlightDlrConsoleCode.SetProperty("value", "");
-            _silverlightDlrConsolePrompt.Focus();
-            _silverlightDlrConsoleCode.Focus();
+            _silverlightDlrReplCode.SetProperty("value", "");
+            _silverlightDlrReplPrompt.Focus();
+            _silverlightDlrReplCode.Focus();
         }
 
         #region Code input
@@ -287,11 +320,11 @@ namespace Microsoft.Scripting.Silverlight {
 
         #region Prompt
         internal void ShowSubPrompt() {
-            _outputBuffer.PutTextInElement(SubPromptHtml(), _silverlightDlrConsolePrompt);
+            _outputBuffer.PutTextInElement(SubPromptHtml(), _silverlightDlrReplPrompt);
         }
 
         internal void ShowPrompt() {
-            _outputBuffer.PutTextInElement(PromptHtml(), _silverlightDlrConsolePrompt);
+            _outputBuffer.PutTextInElement(PromptHtml(), _silverlightDlrReplPrompt);
         }
 
         internal string PromptHtml() {
@@ -339,11 +372,11 @@ namespace Microsoft.Scripting.Silverlight {
 
         #region History
         public void ShowNextCommand() {
-            _silverlightDlrConsoleCode.SetProperty("value", GetNextCommand());
+            _silverlightDlrReplCode.SetProperty("value", GetNextCommand());
         }
 
         public void ShowPreviousCommand() {
-            _silverlightDlrConsoleCode.SetProperty("value", GetPreviousCommand());
+            _silverlightDlrReplCode.SetProperty("value", GetPreviousCommand());
         }
         #endregion
 
@@ -351,14 +384,14 @@ namespace Microsoft.Scripting.Silverlight {
     }
 
     #region Text Buffer
-    public class ConsoleOutputBuffer : ConsoleWriter {
+    public class ReplOutputBuffer : ConsoleWriter {
         public string ElementClass;
         public string ElementName;
         private HtmlElement _results;
         private string _outputClass;
         private string _queue;
 
-        public ConsoleOutputBuffer(HtmlElement results, string outputClass) {
+        public ReplOutputBuffer(HtmlElement results, string outputClass) {
             _results = results;
             _outputClass = outputClass;
         }
@@ -417,9 +450,9 @@ namespace Microsoft.Scripting.Silverlight {
         #endregion
     }
 
-    public class ConsoleInputBuffer : ConsoleWriter {
+    public class ReplInputBuffer : ConsoleWriter {
         private Console _console;
-        public ConsoleInputBuffer(Console console) {
+        public ReplInputBuffer(Console console) {
             _console = console;
         }
         public override void Write(string str) {
