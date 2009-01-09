@@ -24,6 +24,8 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Browser;
+using System.Reflection;
+using System.IO;
 
 namespace Microsoft.Scripting.Silverlight {
     public class Window {
@@ -73,20 +75,33 @@ namespace Microsoft.Scripting.Silverlight {
 
         #region Public API
         public static void Show() {
-            Show((HtmlElement)null);
+            Show(true);
         }
 
         public static void Show(string windowLocationId) {
-            Show(HtmlPage.Document.GetElementById(windowLocationId));
+            Show(windowLocationId, true);
         }
 
         public static void Show(HtmlElement windowLocationDiv) {
+            Show(windowLocationDiv, true);
+        }
+
+        public static void Show(bool inject) {
+            Show((HtmlElement)null, inject);
+        }
+
+        public static void Show(string windowLocationId, bool inject) {
+            Show(HtmlPage.Document.GetElementById(windowLocationId), inject);
+        }
+
+        public static void Show(HtmlElement windowLocationDiv, bool inject) {
             if (_current == null) {
-                _current = new Window(windowLocationDiv);
+                _current = new Window(windowLocationDiv, inject);
             }
         }
 
         public void AddPanel(string title, HtmlElement panel) {
+            panel.CssClass += " silverlightDlrPanel";
             _current.Contents.AppendChild(panel);
             AddMenuItem(title, panel.Id);
         }
@@ -108,7 +123,7 @@ namespace Microsoft.Scripting.Silverlight {
         #endregion
 
         #region Implementation
-        private Window(HtmlElement windowLocationDiv) {
+        private Window(HtmlElement windowLocationDiv, bool injectStyleAndScript) {
             _windowLocationDiv = windowLocationDiv;
             if (_windowLocationDiv == null) {
                 _windowLocationDiv = HtmlPage.Document.CreateElement("div");
@@ -118,6 +133,38 @@ namespace Microsoft.Scripting.Silverlight {
                 HtmlPage.Document.Body.AppendChild(_windowLocationDiv);
             }
             _windowLocationDiv.SetProperty("innerHTML", WindowHtml());
+
+            if (injectStyleAndScript) {
+                InjectScriptBlock();
+                InjectStyleBlock();
+            }
+        }
+
+        private void InjectScriptBlock() {
+            HtmlHead().AppendChild(EmbedResourceInTag("script", "text/javascript", "agdlr.js"));
+        }
+
+        private void InjectStyleBlock() {
+            HtmlHead().AppendChild(EmbedResourceInTag("style", "text/css", "agdlr.css"));
+        }
+
+        private HtmlElement EmbedResourceInTag(string tagName, string mimeType, string filename) {
+            var block = HtmlPage.Document.CreateElement(tagName);
+            block.SetAttribute("type", mimeType);
+            block.SetProperty("innerHTML", GetResource(filename));
+            return block;
+        }
+
+        private HtmlElement HtmlHead() {
+            return HtmlPage.Document.GetElementsByTagName("head")[0] as HtmlElement;
+        }
+
+        private string GetResource(string filename) {
+            var assembly = Assembly.GetExecutingAssembly();
+            var textStreamReader = new StreamReader(assembly.GetManifestResourceStream("Microsoft.Scripting.Silverlight." + filename));
+            var result = textStreamReader.ReadToEnd();
+            textStreamReader.Close();
+            return result;
         }
 
         private string WindowHtml() {
