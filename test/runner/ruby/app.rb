@@ -54,10 +54,11 @@ end
 # TODO need a way to walk all *_test.rb files in tests directory
 
 $test_files = %W(
+  console
   dynamic_application
   extension_types
   package
-  console
+  window
 )
 
 def run_test(test)

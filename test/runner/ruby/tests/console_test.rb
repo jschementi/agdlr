@@ -13,7 +13,7 @@ describe 'Console regressions' do
 
   it 'should escape HTML property' do
     ReplOutputBuffer = Microsoft::Scripting::Silverlight::ReplOutputBuffer
-    element = HtmlPage.document.create_element 'div'
+    element = System::Windows::Browser::HtmlPage.document.create_element 'div'
     result = inspect_object(element)
     
     buffer = ReplOutputBuffer.new element, 'output'
