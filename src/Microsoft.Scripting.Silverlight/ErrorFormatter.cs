@@ -85,7 +85,7 @@ namespace Microsoft.Scripting.Silverlight {
             _displayedError = true;
 
             Window.Show(targetElementId);
-            Console.Show();
+            Repl.Show();
 
             string result;
 

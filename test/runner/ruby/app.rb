@@ -25,7 +25,7 @@ require 'bacon'
 #
 class IO
   def write(str)
-    Console.current.output_buffer.write(str)
+    Repl.current.output_buffer.write(str)
   end
 end
 
@@ -76,6 +76,4 @@ def run_tests
   execute_at_exit_blocks
 end
 
-Console.current.input_buffer.write(%Q(
-run_tests
-))
+Repl.current.input_buffer.write("run_tests\n")

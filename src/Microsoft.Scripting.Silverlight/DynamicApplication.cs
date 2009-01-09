@@ -256,7 +256,7 @@ namespace Microsoft.Scripting.Silverlight {
             _engine = _runtime.GetEngineByFileExtension(Path.GetExtension(_entryPoint));
 
             if (_consoleEnabled)
-                Console.Show();
+                Repl.Show();
 
             ScriptSource sourceCode = _engine.CreateScriptSourceFromString(code, _entryPoint, SourceCodeKind.File);
 

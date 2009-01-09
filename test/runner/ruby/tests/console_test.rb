@@ -12,11 +12,11 @@ describe 'Console regressions' do
   end
 
   it 'should escape HTML property' do
-    ConsoleOutputBuffer = Microsoft::Scripting::Silverlight::ConsoleOutputBuffer
+    ReplOutputBuffer = Microsoft::Scripting::Silverlight::ReplOutputBuffer
     element = HtmlPage.document.create_element 'div'
     result = inspect_object(element)
     
-    buffer = ConsoleOutputBuffer.new element, 'output'
+    buffer = ReplOutputBuffer.new element, 'output'
     buffer.write(result)
     buffer.flush
     $element = element

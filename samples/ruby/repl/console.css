@@ -1,21 +1,21 @@
-#silverlightDlrConsole, 
-#silverlightDlrConsoleCode, 
-#silverlightDlrConsoleResult, 
-.silverlightDlrConsolePrompt {
+#silverlightDlrRepl, 
+#silverlightDlrReplCode, 
+#silverlightDlrReplResult, 
+.silverlightDlrReplPrompt {
   font-family: Consolas, "Andale Mono", courier, fixed, monospace;
   font-size: 16px;
 }
 
-#silverlightDlrConsoleCode, 
-#silverlightDlrConsoleResult, 
-.silverlightDlrConsolePrompt {
+#silverlightDlrReplCode, 
+#silverlightDlrReplResult, 
+.silverlightDlrReplPrompt {
   border: 0px;
   line-height: 20px;
   background-color: black;
   color: #eee;
 }
 
-#silverlightDlrConsole {
+#silverlightDlrRepl {
   padding: 15px;
   background-color: black;
   bottom: 0;
@@ -26,22 +26,22 @@
   top: 0;
 }
 
-.silverlightDlrConsolePrompt {
+.silverlightDlrReplPrompt {
   color: yellow;
   float: left;
   display: block;
 }
 
-#silverlightDlrConsoleCode {
+#silverlightDlrReplCode {
   width: 90%;
   height: 20px;
   position: relative;
   left: -1px; top: 0px;
 }
 
-#silverlightDlrConsoleRun {
+#silverlightDlrReplRun {
   display: none;
 }
-form#silverlightDlrConsoleRunForm {
+form#silverlightDlrReplRunForm {
   color: white;
 }

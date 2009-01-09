@@ -21,7 +21,7 @@ using System.IO;
 using Microsoft.Scripting.Hosting;
 
 namespace Microsoft.Scripting.Silverlight {
-    public class Console {
+    public class Repl {
         
         #region Console Html Template
         private const string _sdlr        = "silverlightDlrRepl";
@@ -52,7 +52,7 @@ namespace Microsoft.Scripting.Silverlight {
         private bool                _multiLineComplete;
         private List<string>        _history;
         private int                 _currentCommand = -1;
-        private static Console         _current;
+        private static Repl         _current;
         private ReplOutputBuffer    _outputBuffer;
         private ReplInputBuffer     _inputBuffer;
         private HtmlElement         _silverlightDlrReplCode;
@@ -70,7 +70,7 @@ namespace Microsoft.Scripting.Silverlight {
             get { return _outputBuffer; }
         }
 
-        public static Console Current {
+        public static Repl Current {
             get { return _current; }
         }
         #endregion
@@ -88,7 +88,7 @@ namespace Microsoft.Scripting.Silverlight {
                 Window.Show(DynamicApplication.Current.ErrorTargetID);
                 Window.Current.AddPanel(engine.Setup.DisplayName + " Console", Create(engine));
                 Window.Current.Initialize();
-                Console.Current.Start();
+                Repl.Current.Start();
             }
         }
 
@@ -102,12 +102,12 @@ namespace Microsoft.Scripting.Silverlight {
                 replDiv = HtmlPage.Document.CreateElement("div");
                 replDiv.Id = _sdlr;
                 replDiv.SetProperty("innerHTML", _replHtmlTemplate);
-                _current = new Console(engine);
+                _current = new Repl(engine);
             }
             return replDiv;
         }
 
-        private Console(ScriptEngine engine) {
+        private Repl(ScriptEngine engine) {
             _engine = engine;
         }
 
@@ -215,9 +215,7 @@ namespace Microsoft.Scripting.Silverlight {
         }
         public void RunCode(bool forceExecute) {
             var line = _silverlightDlrReplCode.GetProperty("value").ToString();
-            if (line != string.Empty) {
-                _code = (_code == null || _code == string.Empty ? "" : _code + "\n") + line;
-            }
+            _code = (_code == null ? "" : _code + "\n") + line;
             if (_code != null) {
                 object result = (_code.Split('\n').Length > 1) ? DoMultiLine(forceExecute) : DoSingleLine(forceExecute);
 
@@ -358,10 +356,16 @@ namespace Microsoft.Scripting.Silverlight {
         internal void ShowValueInResultDiv(object result) {
             ScriptScope scope = _engine.CreateScope();
             scope.SetVariable("sdlr_result", result);
-            var resultStr = _engine.CreateScriptSourceFromString("sdlr_result.inspect").Execute(scope).ToString();
+            string resultStr;
+            // TODO: Need some language specific way of doing this:
+            try {
+                resultStr = _engine.CreateScriptSourceFromString("sdlr_result.inspect").Execute(scope).ToString();
+            } catch {
+                resultStr = _engine.CreateScriptSourceFromString("repr(sdlr_result)").Execute(scope).ToString();
+            }
             _outputBuffer.ElementClass = _sdlrValue;
             _outputBuffer.ElementName = "div";
-            _outputBuffer.Write("=> " + (result != null ? resultStr : "nil"));
+            _outputBuffer.Write("=> " + resultStr);
             _outputBuffer.Reset();
         }
 
@@ -402,6 +406,7 @@ namespace Microsoft.Scripting.Silverlight {
             if (ElementName == null) {
                 _queue += str;
             } else {
+                str = str == String.Empty ? " " : str;
                 _results.AppendChild(PutTextInNewElement(str, ElementName, ElementClass));
             }
         }
@@ -451,8 +456,8 @@ namespace Microsoft.Scripting.Silverlight {
     }
 
     public class ReplInputBuffer : ConsoleWriter {
-        private Console _console;
-        public ReplInputBuffer(Console console) {
+        private Repl _console;
+        public ReplInputBuffer(Repl console) {
             _console = console;
         }
         public override void Write(string str) {
