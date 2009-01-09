@@ -263,22 +263,6 @@ namespace Microsoft.Scripting.Silverlight {
         }
 
         private void HandleException(Exception e) {
-            //var de = new ErrorFormatter.DynamicExceptionInfo(e);
-            
-            //_outputBuffer.WriteLine("");
-            //_outputBuffer.WriteLine(de.Message);
-
-            //foreach(var frame in de.DynamicStackFrames) {
-            //    _outputBuffer.WriteLine("  at {0} in {1}, line {2}",
-            //        frame.GetMethodName(),
-            //        frame.GetFileName() != null ? frame.GetFileName() : null,
-            //        frame.GetFileLineNumber()
-            //    );
-            //}
-
-            //_outputBuffer.WriteLine("CLR Stack Trace:");
-            //_outputBuffer.WriteLine(e.StackTrace != null ? e.StackTrace : e.ToString());
-
             _outputBuffer.WriteLine(string.Format("{0}: {1}", e.GetType(), e.Message));
             var dfs = Microsoft.Scripting.Runtime.RuntimeHelpers.GetDynamicStackFrames(e);
             if(dfs == null || dfs.Length == 0) {

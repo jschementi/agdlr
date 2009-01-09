@@ -56,19 +56,18 @@ namespace Microsoft.Scripting.Silverlight {
         // 12 - error stack trace id/class
         private static string _errorHtmlTemplate = @"
 <!-- error report html -->
-  <h2 class=""{6}"" id=""{6}"">{0}</h2>
-  <div class=""{7}"">
+<h2 class=""{6}"" id=""{6}"">{0}</h2>
+<div class=""{7}"">
     <div class=""{8}"" id=""{8}"">{1}</div>
     <code class=""{9}"" id=""{9}"">
-      {2}
+        {2}
     </code>
-  </div>  
-  <div class=""{10}"">
+</div>  
+<div class=""{10}"">
     <div class=""{11}"" id=""{11}"">{3}</div>        
     <code class=""{12}"" id=""{12}""> 
-      {4}
+        {4}
     </code>
-  </div>
 </div>";
 
         // template for highlighted error line, inserted into the silverlightDlrErrorSourceCode div in the template above
