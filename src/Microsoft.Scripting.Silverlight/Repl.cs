@@ -73,6 +73,10 @@ namespace Microsoft.Scripting.Silverlight {
         public static Repl Current {
             get { return _current; }
         }
+
+        public ScriptEngine Engine {
+            get { return _engine; }
+        }
         #endregion
 
         #region Console management
@@ -216,6 +220,7 @@ namespace Microsoft.Scripting.Silverlight {
         public void RunCode(bool forceExecute) {
             var line = _silverlightDlrReplCode.GetProperty("value").ToString();
             _code = (_code == null ? "" : _code + "\n") + line;
+
             if (_code != null) {
                 object result = (_code.Split('\n').Length > 1) ? DoMultiLine(forceExecute) : DoSingleLine(forceExecute);
 
@@ -235,7 +240,7 @@ namespace Microsoft.Scripting.Silverlight {
         }
 
         private object DoMultiLine(bool forceExecute) {
-            if (forceExecute || IsComplete(_code, false)) {
+            if (forceExecute || IsComplete(_code, AllowIncomplete())) {
                 _multiLineComplete = true;
                 var source = _engine.CreateScriptSourceFromString(_code, SourceCodeKind.InteractiveCode);
                 return ExecuteCode(source);
@@ -258,21 +263,35 @@ namespace Microsoft.Scripting.Silverlight {
         }
 
         private void HandleException(Exception e) {
-            var de = new ErrorFormatter.DynamicExceptionInfo(e);
+            //var de = new ErrorFormatter.DynamicExceptionInfo(e);
             
-            _outputBuffer.WriteLine("");
-            _outputBuffer.WriteLine(de.Message);
+            //_outputBuffer.WriteLine("");
+            //_outputBuffer.WriteLine(de.Message);
 
-            foreach(var frame in de.DynamicStackFrames) {
-                _outputBuffer.WriteLine("  at {0} in {1}, line {2}",
-                    frame.GetMethodName(),
-                    frame.GetFileName() != null ? frame.GetFileName() : null,
-                    frame.GetFileLineNumber()
-                );
+            //foreach(var frame in de.DynamicStackFrames) {
+            //    _outputBuffer.WriteLine("  at {0} in {1}, line {2}",
+            //        frame.GetMethodName(),
+            //        frame.GetFileName() != null ? frame.GetFileName() : null,
+            //        frame.GetFileLineNumber()
+            //    );
+            //}
+
+            //_outputBuffer.WriteLine("CLR Stack Trace:");
+            //_outputBuffer.WriteLine(e.StackTrace != null ? e.StackTrace : e.ToString());
+
+            _outputBuffer.WriteLine(string.Format("{0}: {1}", e.GetType(), e.Message));
+            var dfs = Microsoft.Scripting.Runtime.RuntimeHelpers.GetDynamicStackFrames(e);
+            if(dfs == null || dfs.Length == 0) {
+                _outputBuffer.WriteLine(e.StackTrace != null ? e.StackTrace : e.ToString());
+            } else {
+                foreach(var frame in dfs) { 
+                    _outputBuffer.WriteLine("  at {0} in {1}, line {2}",
+                        frame.GetMethodName(),
+                        frame.GetFileName() != null ? frame.GetFileName() : null,
+                        frame.GetFileLineNumber()
+                    );
+                }
             }
-
-            _outputBuffer.WriteLine("CLR Stack Trace:");
-            _outputBuffer.WriteLine(e.StackTrace != null ? e.StackTrace : e.ToString());
         }
 
         public bool IsComplete(string text, bool allowIncomplete) {
@@ -283,6 +302,12 @@ namespace Microsoft.Scripting.Silverlight {
                 (props != ScriptCodeParseResult.IncompleteToken) &&
                 (allowIncomplete || (props != ScriptCodeParseResult.IncompleteStatement));
             return result;
+        }
+
+        private bool AllowIncomplete() {
+            var lines = _code.Split('\n');
+            if(lines.Length == 0) return false;
+            return lines[lines.Length - 1] == string.Empty;
         }
         #endregion
 
