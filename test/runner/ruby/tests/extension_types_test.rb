@@ -1,17 +1,9 @@
 include System::Windows::Browser
 
-def append_to_body(tag_name, options)
-  div = HtmlPage.document.create_element tag_name
-  options.each do |key, value|
-    div.set_property key.to_s.to_clr_string, value.to_s.to_clr_string
-  end	
-  HtmlPage.document.body.append_child div
-  div
-end
-
 describe 'Html document extension' do
   before do
-    @div ||= append_to_body 'div', :id => 'foo'
+    @div ||= tag('div', :id => 'foo')
+    HtmlPage.Document.Body.append_child(@div)
   end
 
   after do
@@ -34,7 +26,8 @@ end
 
 describe 'Html element extension' do
   before do
-    @div ||= append_to_body 'div', :id => 'foo', :innerHTML => 'test'
+    @div ||= tag('div', :id => 'foo', :innerHTML => 'test')
+    HtmlPage.Document.Body.append_child(@div)
   end
   
   after do

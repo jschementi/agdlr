@@ -61,19 +61,31 @@ $test_files = %W(
   window
 )
 
+$integration_files = %W(
+  01
+)
+
 def run_test(test)
   if $test_files.include? test
     load "tests/#{test}_test.rb"
+  elsif $integration_files.include? test
+    load "integration/test_#{test}.rb"
   else
     raise "#{test} is not a known test (check the $test_files list)"
   end
 end
 
 #
+# test helpers
+# 
+require 'helper'
+
+#
 # run and report results of the tests
 #
 def run_tests
   $test_files.each { |t| run_test t }
+  $integration_files.each { |t| run_test t }
   execute_at_exit_blocks
 end
 
