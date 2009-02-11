@@ -1,0 +1,3 @@
+describe "issubclass" do
+
+end
