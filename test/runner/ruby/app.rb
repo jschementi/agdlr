@@ -61,39 +61,38 @@ $test_files = %W(
   window
 )
 
-$integration_files = %W(
-  01
-  args
-  auto_addref
-  domain_loading
-  error_handle
-  execfile
-  issubclass
-  modules
-  multi_import
-  name
-  net
-  querystring
-  re
-  smoke
-  sys_path
-  s_clock_rb
-  s_dlr_console
-  s_fractulator
-  thread
-  utf8
-  xamlloader
-  xcode
-  xcode_semantics
-  x_attribute_error
-  x_devidebyzero
-  x_import_1
-  x_import_2
-  x_import_3
-  x_rethrow
-  x_syntax_error
-  x_typeerror
-)
+$integration_files = [
+  '01',
+  'args',
+  'auto_addref',
+  'error_handle',
+  'execfile',
+  'issubclass',
+  'modules',
+  'multi_import',
+  'name',
+  'net',
+  'querystring',
+  're',
+  'smoke',
+  'sys_path',
+  's_clock_rb',
+  's_dlr_console',
+  's_fractulator',
+  'thread',
+  'utf8',
+  'xamlloader',
+  'xcode',
+  'xcode_semantics',
+  'x_attribute_error',
+  'x_devidebyzero',
+  'x_import_1',
+  'x_import_2',
+  'x_import_3',
+  'x_rethrow',
+  'x_syntax_error',
+  'x_typeerror'
+]
 
 def run_test(test)
   if $test_files.include? test
