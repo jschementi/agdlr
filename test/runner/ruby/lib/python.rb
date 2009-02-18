@@ -7,6 +7,6 @@ def python(str, type = :file)
     GetEngine("IronPython")
   @python_scope ||= @python_engine.CreateScope()
   @python_engine.
-    CreateScriptSourceFromString(str, SourceCodeKind.send(type)).
+    CreateScriptSourceFromString(str.strip, SourceCodeKind.send(type)).
     Execute(@python_scope)
 end
