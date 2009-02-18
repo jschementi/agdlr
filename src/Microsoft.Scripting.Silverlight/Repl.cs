@@ -59,6 +59,7 @@ namespace Microsoft.Scripting.Silverlight {
         private HtmlElement         _silverlightDlrReplResult;
         private HtmlElement         _silverlightDlrReplPrompt;
         private ScriptEngine        _engine;
+        private ScriptScope         _current_scope;
         #endregion
 
         #region Public properties
@@ -113,6 +114,7 @@ namespace Microsoft.Scripting.Silverlight {
 
         private Repl(ScriptEngine engine) {
             _engine = engine;
+            _current_scope = null;
         }
 
         public void Start() {
@@ -254,7 +256,10 @@ namespace Microsoft.Scripting.Silverlight {
         public object ExecuteCode(ScriptSource source) {
             object result;
             try {
-                result = source.Compile(new ErrorFormatter.Sink()).Execute();
+                if (_current_scope == null) {
+                    _current_scope = _engine.CreateScope();
+                }
+                result = source.Compile(new ErrorFormatter.Sink()).Execute(_current_scope);
             } catch (Exception e) {
                 HandleException(e);
                 result = null;
@@ -418,6 +423,10 @@ namespace Microsoft.Scripting.Silverlight {
                 str = str == String.Empty ? " " : str;
                 _results.AppendChild(PutTextInNewElement(str, ElementName, ElementClass));
             }
+        }
+
+        public void write(string str) {
+            Write(str);
         }
 
         public void Reset() {
