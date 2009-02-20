@@ -1,1 +1,1 @@
-%~dp0server /b:index.html /d:%~dp0../test/runner
+%~dp0server /b:index.html /d:%~dp0../test

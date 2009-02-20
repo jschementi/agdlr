@@ -1,7 +1,3 @@
-[submodule "test/runner/ruby/lib/mocha"]
-	path = test/runner/ruby/lib/mocha
-	url = git@github.com:jschementi/mocha.git
-[submodule "test/runner/ruby/lib/bacon"]
-	path = test/runner/ruby/lib/bacon
-	url = git@github.com:jschementi/bacon.git
-
+[submodule "test/tests/lib/eggs"]
+	path = test/tests/lib/eggs
+	url = git@github.com:jschementi/eggs.git

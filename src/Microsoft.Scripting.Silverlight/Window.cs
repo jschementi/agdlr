@@ -137,6 +137,7 @@ namespace Microsoft.Scripting.Silverlight {
             if (injectStyleAndScript) {
                 InjectScriptBlock();
                 InjectStyleBlock();
+                injectStyleAndScript = false;
             }
         }
 

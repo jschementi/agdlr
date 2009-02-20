@@ -1,5 +1,5 @@
 /*
- * Window
+ * AgDLR
  */
 
 div.silverlightDlrWindow {
@@ -174,7 +174,7 @@ div.silverlightDlrErrorStackTraceLine {
   padding: 5px;
   background-color: #222;
   overflow: auto;
-  height: 300px;
+  height: 450px;
 }
 
 .silverlightDlrReplPrompt {
