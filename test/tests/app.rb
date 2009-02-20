@@ -2,7 +2,7 @@
 # Test harness for running Microsoft::Scripting::Silverlight tests. 
 #
 
-$: << 'lib/eggs'
+$: << 'lib/eggs/lib'
 require 'eggs'
 
 require 'debugger'
