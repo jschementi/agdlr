@@ -1,4 +1,4 @@
-include System::Windows::Browser
+include Helpers
 
 describe 'Html document extension' do
   before do
@@ -55,7 +55,7 @@ end
 describe 'Framework element extension' do
   before do
     @root = System::Windows::Controls::UserControl.new
-    DynamicApplication.current.load_component @root, 'tests/assets/foo.xaml'
+    DynamicApplication.current.load_component @root, "#{File.dirname(__FILE__)}/assets/foo.xaml"
   end
 
   it 'should find a UIElement' do

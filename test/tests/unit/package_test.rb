@@ -13,10 +13,10 @@ module ArbitraryModuleSoConsoleDoesNotConflict
     end
   
     before do
-      @path ||= 'tests/assets/tmp.txt'
+      @path ||= "#{File.dirname(__FILE__)}/assets/tmp.txt"
       @uri ||= Uri.new(@path, UriKind.relative)
       @contents ||= "Hello!\r\n".to_clr_string
-      @doesnotexist ||= 'tests/assets/doesnotexist.txt'
+      @doesnotexist ||= "#{File.dirname(__FILE__)}/assets/doesnotexist.txt"
     end
   
     it 'should get file contents from a string' do
