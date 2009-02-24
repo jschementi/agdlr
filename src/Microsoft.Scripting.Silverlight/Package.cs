@@ -27,11 +27,19 @@ namespace Microsoft.Scripting.Silverlight {
         private const string _defaultEntryPoint = "app";
 
         public static string GetFileContents(string relativePath) {
-            return GetFileContents(new Uri(NormalizePath(relativePath), UriKind.Relative));
+            return GetFileContents(null, relativePath);
         }
 
         public static string GetFileContents(Uri relativeUri) {
-            Stream stream = GetFile(relativeUri);
+            return GetFileContents(null, relativeUri);
+        }
+
+        public static string GetFileContents(StreamResourceInfo xap, string relativePath) {
+            return GetFileContents(xap, new Uri(NormalizePath(relativePath), UriKind.Relative));
+        }
+
+        public static string GetFileContents(StreamResourceInfo xap, Uri relativeUri) {
+            Stream stream = GetFile(xap, relativeUri);
             if (stream == null) {
                 return null;
             }
@@ -44,11 +52,32 @@ namespace Microsoft.Scripting.Silverlight {
         }
 
         public static Stream GetFile(string relativePath) {
-            return GetFile(new Uri(NormalizePath(relativePath), UriKind.Relative));
+            return GetFileInternal(null, relativePath);
         }
 
         public static Stream GetFile(Uri relativeUri) {
-            StreamResourceInfo sri = Application.GetResourceStream(relativeUri);
+            return GetFileInternal(null, relativeUri);
+        }
+        
+        public static Stream GetFile(StreamResourceInfo xap, string relativePath) {
+            return GetFileInternal(xap, relativePath);
+        }
+
+        public static Stream GetFile(StreamResourceInfo xap, Uri relativeUri) {
+            return GetFileInternal(xap, relativeUri);
+        }
+
+        private static Stream GetFileInternal(StreamResourceInfo xap, string relativePath) {
+            return GetFileInternal(xap, new Uri(NormalizePath(relativePath), UriKind.Relative));
+        }
+
+        private static Stream GetFileInternal(StreamResourceInfo xap, Uri relativeUri) {
+            StreamResourceInfo sri = null;
+            if (xap == null) {
+                sri = Application.GetResourceStream(relativeUri);
+            } else {
+                sri = Application.GetResourceStream(xap, relativeUri);
+            }
             return (sri != null) ? sri.Stream : null;
         }
 

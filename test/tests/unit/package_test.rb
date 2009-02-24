@@ -3,6 +3,7 @@ module ArbitraryModuleSoConsoleDoesNotConflict
   include System
   include System::IO
   include System::Windows
+  include System::Windows::Resources
   
   describe 'Package' do
     def get_stream_contents(stream)
@@ -17,6 +18,8 @@ module ArbitraryModuleSoConsoleDoesNotConflict
       @uri ||= Uri.new(@path, UriKind.relative)
       @contents ||= "Hello!\r\n".to_clr_string
       @doesnotexist ||= "#{File.dirname(__FILE__)}/assets/doesnotexist.txt"
+      @other_xap_uri = Uri.new("#{File.dirname(__FILE__)}/assets/pkg.xap", UriKind.relative)
+      @other_xap = Application.get_resource_stream(@other_xap_uri)
     end
   
     it 'should get file contents from a string' do
@@ -26,7 +29,11 @@ module ArbitraryModuleSoConsoleDoesNotConflict
     it 'should get file contents from a Uri' do
       Package.get_file_contents(@uri).should.equal @contents
     end
-  
+ 
+    it 'should get file contents in another xap' do
+      Package.get_file_contents(@other_xap, 'pkg/foo.txt').should.equal "hello world".to_clr_string
+    end
+
     it 'should not get a file contents' do
       Package.get_file_contents(@doesnotexist).should.be.nil
     end
@@ -41,6 +48,11 @@ module ArbitraryModuleSoConsoleDoesNotConflict
         should.equal get_stream_contents(Application.get_resource_stream(@uri).stream)
     end
   
+    it 'should get file stream from another xap' do
+      get_stream_contents(Package.get_file(@other_xap, 'pkg/foo.txt')).
+        should.equal get_stream_contents(Application.get_resource_stream(@other_xap, Uri.new('pkg/foo.txt', UriKind.relative)).stream)
+    end
+
     it 'should not get a file' do
       Package.get_file(@doesnotexist).should.be.nil
     end
