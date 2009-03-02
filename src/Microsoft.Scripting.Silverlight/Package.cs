@@ -83,7 +83,15 @@ namespace Microsoft.Scripting.Silverlight {
 
         public static string NormalizePath(string path) {
             // files are stored in the XAP using forward slashes
-            return path.Replace(Path.DirectorySeparatorChar, '/');
+            string normPath = path.Replace(Path.DirectorySeparatorChar, '/');
+
+            // Application.GetResource doesn't like paths that start with ./ 
+            // TODO try to get this fixed in SL
+            if (normPath.StartsWith("./")) {
+                normPath = normPath.Substring(2);
+            }
+
+            return normPath;
         }
 
         public static IEnumerable<Assembly> GetManifestAssemblies() {

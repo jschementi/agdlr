@@ -116,6 +116,9 @@ namespace Microsoft.Scripting.Silverlight {
             get { return _engine; }
         }
 
+        internal ScriptScope EntryPointScope {
+            get { return _entryPointScope; }
+        }
         #endregion
 
         #region instance variables
@@ -138,6 +141,7 @@ namespace Microsoft.Scripting.Silverlight {
         private ScriptRuntime _runtime;
         private ScriptRuntimeSetup _runtimeSetup;
         private ScriptEngine _engine;
+        private ScriptScope _entryPointScope;
 
         internal static bool InUIThread {
             get { return _UIThreadId == Thread.CurrentThread.ManagedThreadId; }
@@ -203,6 +207,14 @@ namespace Microsoft.Scripting.Silverlight {
             return setup;
         }
 
+        public static StreamResourceInfo GetXapFile(ScriptRuntime runtime) {
+            return ((BrowserPAL)runtime.Host.PlatformAdaptationLayer).XapFile;
+        }
+
+        public static void SetXapFile(ScriptRuntime runtime, StreamResourceInfo xapFile) {
+            ((BrowserPAL)runtime.Host.PlatformAdaptationLayer).XapFile = xapFile;
+        }
+
         #endregion
 
         #region implementation
@@ -242,28 +254,34 @@ namespace Microsoft.Scripting.Silverlight {
             _runtime = new ScriptRuntime(setup);
 
             _runtime.LoadAssembly(GetType().Assembly); // to expose our helper APIs
+            LoadDefaultAssemblies(_runtime);
+        }
 
+        public static void LoadDefaultAssemblies(ScriptRuntime runtime) {
             // Add default references to Silverlight platform DLLs
             // (Currently we auto reference CoreCLR, UI controls, browser interop, and networking stack.)
             foreach (string name in new string[] { "mscorlib", "System", "System.Windows", "System.Windows.Browser", "System.Net" }) {
-                _runtime.LoadAssembly(BrowserPAL.PAL.LoadAssembly(name));
+                runtime.LoadAssembly(GetAssemblyByName(name));
             }
+        }
+
+        public static Assembly GetAssemblyByName(string name) {
+            return BrowserPAL.PAL.LoadAssembly(name);
         }
 
         private void StartMainProgram() {
             string code = Package.GetEntryPointContents();
 
             _engine = _runtime.GetEngineByFileExtension(Path.GetExtension(_entryPoint));
+            
+            _entryPointScope = _engine.CreateScope();
 
             if (_consoleEnabled)
                 Repl.Show();
 
             ScriptSource sourceCode = _engine.CreateScriptSourceFromString(code, _entryPoint, SourceCodeKind.File);
 
-            // Create a new script module & execute the code.
-            // It's important to use optimized scopes,
-            // which are ~4x faster on benchmarks that make heavy use of top-level functions/variables.
-            sourceCode.Compile(new ErrorFormatter.Sink()).Execute();
+            sourceCode.Compile(new ErrorFormatter.Sink()).Execute(_entryPointScope);
         }
 
 

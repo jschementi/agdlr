@@ -59,7 +59,7 @@ namespace Microsoft.Scripting.Silverlight {
         private HtmlElement         _silverlightDlrReplResult;
         private HtmlElement         _silverlightDlrReplPrompt;
         private ScriptEngine        _engine;
-        private ScriptScope         _current_scope;
+        private ScriptScope         _currentScope;
         #endregion
 
         #region Public properties
@@ -85,36 +85,43 @@ namespace Microsoft.Scripting.Silverlight {
         /// Creates a console and inserts it into the page.
         /// </summary>
         public static void Show() {
-            Show(DynamicApplication.Current.Engine);
+            if (DynamicApplication.Current == null) {
+                throw new Exception("Need to give Show() an engine, since this is not a dynamic application");
+            }
+            Show(DynamicApplication.Current.Engine, DynamicApplication.Current.EntryPointScope);
         }
 
-        public static void Show(ScriptEngine engine) {
+        public static void Show(ScriptEngine engine, ScriptScope scope) {
             if (_current == null) {
-                Window.Show(DynamicApplication.Current.ErrorTargetID);
-                Window.Current.AddPanel(engine.Setup.DisplayName + " Console", Create(engine));
+                if (DynamicApplication.Current == null) {
+                    Window.Show();
+                } else {
+                    Window.Show(DynamicApplication.Current.ErrorTargetID);
+                }
+                Window.Current.AddPanel(engine.Setup.Names[0] + " Console", Create(engine, scope));
                 Window.Current.Initialize();
                 Repl.Current.Start();
             }
         }
 
         public static HtmlElement Create() {
-            return Create(DynamicApplication.Current.Engine);
+            return Create(DynamicApplication.Current.Engine, DynamicApplication.Current.EntryPointScope);
         }
 
-        public static HtmlElement Create(ScriptEngine engine) {
+        public static HtmlElement Create(ScriptEngine engine, ScriptScope scope) {
             HtmlElement replDiv = null;
             if (_current == null) {
                 replDiv = HtmlPage.Document.CreateElement("div");
                 replDiv.Id = _sdlr;
                 replDiv.SetProperty("innerHTML", _replHtmlTemplate);
-                _current = new Repl(engine);
+                _current = new Repl(engine, scope);
             }
             return replDiv;
         }
 
-        private Repl(ScriptEngine engine) {
+        private Repl(ScriptEngine engine, ScriptScope scope) {
             _engine = engine;
-            _current_scope = null;
+            _currentScope = scope;
         }
 
         public void Start() {
@@ -256,10 +263,10 @@ namespace Microsoft.Scripting.Silverlight {
         public object ExecuteCode(ScriptSource source) {
             object result;
             try {
-                if (_current_scope == null) {
-                    _current_scope = _engine.CreateScope();
+                if (_currentScope == null) {
+                    _currentScope = _engine.CreateScope();
                 }
-                result = source.Compile(new ErrorFormatter.Sink()).Execute(_current_scope);
+                result = source.Compile(new ErrorFormatter.Sink()).Execute(_currentScope);
             } catch (Exception e) {
                 HandleException(e);
                 result = null;

@@ -42,9 +42,6 @@ namespace Microsoft.Scripting.Silverlight {
         }
 
         public override bool FileExists(string path) {
-            if (!DynamicApplication.InUIThread) {
-                return false; // Application.GetResourceStream will throw if called from a non-UI thread
-            }
             return Package.GetFile(_xapFile, path) != null;
         }
 

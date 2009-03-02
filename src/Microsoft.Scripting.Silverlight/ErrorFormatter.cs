@@ -27,7 +27,7 @@ using Microsoft.Scripting.Hosting.Providers;
 
 namespace Microsoft.Scripting.Silverlight {
 
-    internal static class ErrorFormatter {
+    public static class ErrorFormatter {
 
         #region Error HTML Template
         private const string _errorReportId     = "silverlightDlrErrorReport";
@@ -207,7 +207,7 @@ namespace Microsoft.Scripting.Silverlight {
             return HttpUtility.HtmlEncode(str).Replace(" ", "&nbsp;").Replace("\n", "<br />");
         }
 
-        internal class Sink : ErrorListener {
+        public class Sink : ErrorListener {
             public override void ErrorReported(ScriptSource source, string message, SourceSpan span, int errorCode, Severity severity) {
                 throw new SyntaxErrorException(message, HostingHelpers.GetSourceUnit(source), span, errorCode, severity);
             }
