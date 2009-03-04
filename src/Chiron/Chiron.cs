@@ -36,6 +36,7 @@ namespace Chiron {
         static bool _saveManifest;
         static string _error;
         static string _startPage;
+        static string[] _localPath;
 
         // these properties are lazy loaded so we don't parse the configuration file unless necessary
         static AppManifestTemplate _ManifestTemplate;
@@ -184,6 +185,7 @@ Options:
             _silent = false;
             _nologo = false;
             _help = false;
+            _localPath = new string[]{ };
 
             foreach (string option in args) {
                 if (option[0] != '-' && option[0] != '/') {
@@ -253,6 +255,9 @@ Options:
                     _browser = true;
                     _webserver = true;
                     break;
+                case "path":
+                    ParseAndSetLocalPath(val);
+                    break;
                 case "m": case "manifest":
                     _saveManifest = true;
                     break;
@@ -282,6 +287,20 @@ Options:
                 _help = true;
         }
 
+        internal static void ParseAndSetLocalPath(string pathString) {
+            var __path = new List<string>();
+            string[] paths = pathString.Split(';');
+            foreach (string path in paths) {
+                var fullPath = path;
+                if (!Path.IsPathRooted(path)) 
+                    fullPath = Path.Combine(ChironPath(), path);
+                if (Directory.Exists(fullPath)) {
+                    __path.Add(fullPath);
+                }
+            }
+            _localPath = __path.ToArray();
+        }
+
         public static void Log(int statusCode, string uri, int byteCount, string message) {
             if (!_silent) {
                 if (string.IsNullOrEmpty(message)) {
@@ -295,6 +314,9 @@ Options:
             }
         }
 
+        internal static string[] LocalPath {
+            get { return _localPath; }
+        }
 
         internal static AppManifestTemplate ManifestTemplate {
             get {
@@ -355,19 +377,22 @@ Options:
             }
         }
 
+        private static string ChironPath() {
+            return Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+        }
+
         // Looks for a DLR/language assembly relative to Chiron.exe
         // The path is set in localAssemblyPath in Chiron.exe.config's appSettings section
         internal static string TryGetAssemblyPath(string name) {
             if (_LocalAssemblyPath == null) {
-                string chironPath = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
 
                 _LocalAssemblyPath = ConfigurationManager.AppSettings["localAssemblyPath"] ?? "";
                 if (!Path.IsPathRooted(_LocalAssemblyPath)) {
-                    _LocalAssemblyPath = Path.Combine(chironPath, _LocalAssemblyPath);
+                    _LocalAssemblyPath = Path.Combine(ChironPath(), _LocalAssemblyPath);
                 }
                 if (!Directory.Exists(_LocalAssemblyPath)) {
                     // fallback to Chiron install location
-                    _LocalAssemblyPath = chironPath;
+                    _LocalAssemblyPath = ChironPath();
                 }
             }
 

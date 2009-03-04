@@ -57,9 +57,15 @@ namespace Chiron {
 
             GenerateLanguagesConfig(zip, langs);
 
+            // add directories that are on Chiron's path
+            foreach (var path in Chiron.LocalPath) {
+                string[] splitPath = path.Split(Path.DirectorySeparatorChar);
+                zip.CopyFromDirectory(path, splitPath[splitPath.Length - 1]);
+            }
+
             // add files on disk last so they always overwrite generated files
             zip.CopyFromDirectory(dir, "");
-            
+
             zip.Close();
         }
 

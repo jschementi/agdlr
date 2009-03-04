@@ -1,6 +1,5 @@
 include System
 include System::Windows
-require 'lib/helpers/debug'
 
 $PARAMS = {}
 Application.current.init_params.collect do |pair|
