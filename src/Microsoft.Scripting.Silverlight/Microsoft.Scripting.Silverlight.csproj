@@ -24,7 +24,7 @@
     <NoStdLib>true</NoStdLib>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <SilverlightBuild>true</SilverlightBuild>
-    <SilverlightInstallPath>$(ProgramFiles)\Microsoft Silverlight\2.0.40115.0</SilverlightInstallPath>
+    <SilverlightInstallPath>$(ProgramFiles)\Microsoft Silverlight\3.0.40226.0</SilverlightInstallPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Silverlight Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,7 +37,7 @@
     <NoStdLib>true</NoStdLib>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <SilverlightBuild>true</SilverlightBuild>
-    <SilverlightInstallPath>$(ProgramFiles)\Microsoft Silverlight\2.0.40115.0</SilverlightInstallPath>
+    <SilverlightInstallPath>$(ProgramFiles)\Microsoft Silverlight\3.0.40226.0</SilverlightInstallPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Scripting, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
