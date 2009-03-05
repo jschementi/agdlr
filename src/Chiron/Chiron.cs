@@ -60,12 +60,6 @@ Copyright (c) Microsoft Corporation.  All rights reserved.
 
 Options:
 
-  /z[ipdlr]:<file>
-    Generates a XAP file, including dynamic language DLLs, and
-    auto-generates AppManifest.xaml (equivalent of /m in memory), 
-    if it does not exist.
-    Does not start the web server, cannot be combined with /w or /b
-
   /w[ebserver][:<port number>]
     Launches a development web server that automatically creates
     XAP files for dynamic language applications (runs /z for every
@@ -76,15 +70,30 @@ Options:
     Launches the default browser and starts the web server
     Implies /w, cannot be combined with /x or /z
 
+  /z[ipdlr]:<file>
+    Generates a XAP file, including dynamic language DLLs, and
+    auto-generates AppManifest.xaml (equivalent of /m in memory), 
+    if it does not exist.
+    Does not start the web server, cannot be combined with /w or /b
+
   /m[anifest]
     Saves the generated AppManifest.xaml file to disk
     Use /d to set the directory containing the sources
     Can only be combined with /d, /n and /s
 
-  /d[irectory]:<path>
+  /d[ir[ectory]]:<path>
     Specifies directory on disk (default: the current directory)
 
-  /x[ap]:<file>
+  /r[efpath]:<path>
+    Path where assemblies are located. Default is same directory
+    as Chiron.exe. Overrides appSettings.localAssemblyPath in 
+    Chiron.exe.config
+
+  /path:<path1;path2;..;pathn>
+    semi-color-separated directories to be included in the XAP file,
+    in addition to what is specified by /d
+
+  /x[ap[file]]:<file>
     Specifies XAP file to generate. Only XAPs a directory; does not
     generate a manifest or add dynamic language DLLs; see /z for that
     functionality.
