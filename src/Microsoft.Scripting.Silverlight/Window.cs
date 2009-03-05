@@ -154,11 +154,25 @@ namespace Microsoft.Scripting.Silverlight {
         private HtmlElement EmbedResourceInTag(string tagName, string mimeType, string filename) {
             var block = HtmlPage.Document.CreateElement(tagName);
             block.SetAttribute("type", mimeType);
-            var property = "innerHTML";
-            if (HtmlPage.BrowserInformation.UserAgent.Contains("WebKit")) {
-                property = tagName == "style" ? "innerText" : "innerHTML";
+            
+            string scriptOrStyle = GetResource(filename);
+            
+            var ieScriptOrStyleSet = false;
+
+            if (HtmlPage.BrowserInformation.UserAgent.Contains("Trident")) {
+                if (tagName == "script") {
+                    block.SetProperty("text", scriptOrStyle);
+                    ieScriptOrStyleSet = true;
+                } else if (tagName == "style") {
+                    (block.GetProperty("styleSheet") as ScriptObject).SetProperty("cssText", scriptOrStyle);
+                    ieScriptOrStyleSet = true;
+                }
             }
-            block.SetProperty(property, GetResource(filename));
+            
+            if(!ieScriptOrStyleSet) {
+                var textNode = HtmlPage.Document.Invoke("createTextNode", new string[] { scriptOrStyle });
+                (block as ScriptObject).Invoke("appendChild", new object[] { textNode });
+            }
             return block;
         }
 
