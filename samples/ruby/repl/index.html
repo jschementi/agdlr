@@ -1,16 +1,8 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head>
-    <title>IronRuby</title>
-
-    <!-- Basic stylesheet for applicaiton -->
-    <link type="text/css" rel="stylesheet" href="stylesheets/screen.css" />
-    <link type="text/css" rel="stylesheet" href="stylesheets/console.css" />
-    <!-- Formatting for Dynamic Language error window -->
-    <link type="text/css" rel="stylesheet" href="stylesheets/error.css" />
-    <!-- Defines "onSilverlightError" function for Silverlight plugin -->
-    <script type="text/javascript" src="javascripts/error.js"></script>
-  
+  <title>IronRuby</title>
+  <link type="text/css" rel="stylesheet" href="console.css" />
 </head>
 
 <body>
@@ -76,7 +68,7 @@
             This is useful when debugging C#/Visual Basic when called from a 
             dynamic language.
       -->
-      <param name="initParams" value="debug=true, reportErrors=errorLocation, console=true" />
+      <param name="initParams" value="debug=true, reportErrors=errorLocation" />
         
       <!-- Handle all Silverlight errors with function defined in javascripts/error.js -->
       <param name="onerror" value="onSilverlightError" />

@@ -1,4 +1,3 @@
-# TODO: implement caching?
 class Brushes
   def self.black
     SolidColorBrush.new(Color.from_argb(0xff, 0x00, 0x00, 0x00))

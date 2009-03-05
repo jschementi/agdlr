@@ -15,7 +15,5 @@
     <AssemblyPart Source="IronPython.Modules.dll" />
     <AssemblyPart Source="IronRuby.dll" />
     <AssemblyPart Source="IronRuby.Libraries.dll" />
-    <AssemblyPart Source="Microsoft.JScript.Runtime.dll" />
-    <AssemblyPart Source="Microsoft.JScript.Compiler.dll" />
   </Deployment.Parts>
 </Deployment>

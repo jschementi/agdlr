@@ -1,11 +1,12 @@
-require "silverlight"
+include Microsoft::Scripting::Silverlight
+include System::Windows::Browser
 
-class App < SilverlightApplication
-  use_xaml
+replDiv = Repl.create
+HtmlPage.document.body.append_child replDiv
+Repl.current.start
 
-  def initialize
-    message.text = "Welcome to Ruby and Silverlight!"
+class IO
+  def write(str)
+    Repl.current.output_buffer.write(str)
   end
 end
-
-$app = App.new

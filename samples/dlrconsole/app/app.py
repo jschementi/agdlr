@@ -22,7 +22,7 @@ import sys, clr
 clr.AddReference('Microsoft.Scripting')
 clr.AddReference('Microsoft.Scripting.Core')
 from Microsoft.Scripting.Hosting import *      
-from System.Scripting import SourceLocation, SourceSpan
+from Microsoft.Scripting import SourceLocation, SourceSpan
 from Microsoft.Scripting import TokenCategory, SourceCodeKind, ScriptCodeParseResult
 from Microsoft.Scripting import TokenTriggers
 from Microsoft.Scripting.Silverlight import DynamicApplication

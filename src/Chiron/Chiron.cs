@@ -57,30 +57,18 @@ Copyright (c) Microsoft Corporation.  All rights reserved.
                 Console.WriteLine(
 @"Usage: Chiron [<options>]
 
-General Options:
-
-  /d[irectory]:<path>
-    Specifies directory on disk (default: the current directory)
-
-  /x[ap]:<file>
-    Specifies XAP file to generate
-    Does not start the web server, cannot be combined with /w or /b
-
-  /n[ologo]
-    Suppresses display of the logo banner
-
-  /s[ilent]
-    Suppresses display of all output
-
-Dynamic Language Options:
+Options:
 
   /z[ipdlr]:<file>
-    Like /x, but includes files needed for dynamic language apps
+    Generates a XAP file, including dynamic language DLLs, and
+    auto-generates AppManifest.xaml (equivalent of /m in memory), 
+    if it does not exist.
     Does not start the web server, cannot be combined with /w or /b
 
   /w[ebserver][:<port number>]
     Launches a development web server that automatically creates
-    XAP files for dynamic language applications
+    XAP files for dynamic language applications (runs /z for every
+    request of a XAP file, but generates it in memory).
     Optionally specifies server port number (default: 2060)
 
   /b[rowser][:<start url>]
@@ -91,6 +79,21 @@ Dynamic Language Options:
     Saves the generated AppManifest.xaml file to disk
     Use /d to set the directory containing the sources
     Can only be combined with /d, /n and /s
+
+  /d[irectory]:<path>
+    Specifies directory on disk (default: the current directory)
+
+  /x[ap]:<file>
+    Specifies XAP file to generate. Only XAPs a directory; does not
+    generate a manifest or add dynamic language DLLs; see /z for that
+    functionality.
+    Does not start the web server, cannot be combined with /w or /b
+
+  /n[ologo]
+    Suppresses display of the logo banner
+
+  /s[ilent]
+    Suppresses display of all output
 ");
             }
             else if (_error != null) {

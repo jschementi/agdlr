@@ -1,3 +1,18 @@
+/* ****************************************************************************
+ *
+ * Copyright (c) Microsoft Corporation. 
+ *
+ * This source code is subject to terms and conditions of the Microsoft Public License. A 
+ * copy of the license can be found in the License.html file at the root of this distribution. If 
+ * you cannot locate the  Microsoft Public License, please send an email to 
+ * dlr@microsoft.com. By using this source code in any fashion, you are agreeing to be bound 
+ * by the terms of the Microsoft Public License.
+ *
+ * You must not remove this notice, or any other, from this software.
+ *
+ *
+ * ***************************************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,11 +27,19 @@ namespace Microsoft.Scripting.Silverlight {
         private const string _defaultEntryPoint = "app";
 
         public static string GetFileContents(string relativePath) {
-            return GetFileContents(new Uri(NormalizePath(relativePath), UriKind.Relative));
+            return GetFileContents(null, relativePath);
         }
 
         public static string GetFileContents(Uri relativeUri) {
-            Stream stream = GetFile(relativeUri);
+            return GetFileContents(null, relativeUri);
+        }
+
+        public static string GetFileContents(StreamResourceInfo xap, string relativePath) {
+            return GetFileContents(xap, new Uri(NormalizePath(relativePath), UriKind.Relative));
+        }
+
+        public static string GetFileContents(StreamResourceInfo xap, Uri relativeUri) {
+            Stream stream = GetFile(xap, relativeUri);
             if (stream == null) {
                 return null;
             }
@@ -29,17 +52,46 @@ namespace Microsoft.Scripting.Silverlight {
         }
 
         public static Stream GetFile(string relativePath) {
-            return GetFile(new Uri(NormalizePath(relativePath), UriKind.Relative));
+            return GetFileInternal(null, relativePath);
         }
 
         public static Stream GetFile(Uri relativeUri) {
-            StreamResourceInfo sri = Application.GetResourceStream(relativeUri);
+            return GetFileInternal(null, relativeUri);
+        }
+        
+        public static Stream GetFile(StreamResourceInfo xap, string relativePath) {
+            return GetFileInternal(xap, relativePath);
+        }
+
+        public static Stream GetFile(StreamResourceInfo xap, Uri relativeUri) {
+            return GetFileInternal(xap, relativeUri);
+        }
+
+        private static Stream GetFileInternal(StreamResourceInfo xap, string relativePath) {
+            return GetFileInternal(xap, new Uri(NormalizePath(relativePath), UriKind.Relative));
+        }
+
+        private static Stream GetFileInternal(StreamResourceInfo xap, Uri relativeUri) {
+            StreamResourceInfo sri = null;
+            if (xap == null) {
+                sri = Application.GetResourceStream(relativeUri);
+            } else {
+                sri = Application.GetResourceStream(xap, relativeUri);
+            }
             return (sri != null) ? sri.Stream : null;
         }
 
         public static string NormalizePath(string path) {
             // files are stored in the XAP using forward slashes
-            return path.Replace(Path.DirectorySeparatorChar, '/');
+            string normPath = path.Replace(Path.DirectorySeparatorChar, '/');
+
+            // Application.GetResource doesn't like paths that start with ./ 
+            // TODO try to get this fixed in SL
+            if (normPath.StartsWith("./")) {
+                normPath = normPath.Substring(2);
+            }
+
+            return normPath;
         }
 
         public static IEnumerable<Assembly> GetManifestAssemblies() {
