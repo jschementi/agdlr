@@ -118,6 +118,7 @@ Options:
                         XapBuilder.XapToDisk(_dir, _xapfile);
                     } else {
                         ZipArchive xap = new ZipArchive(_xapfile, FileAccess.Write);
+                        XapBuilder.AddPathDirectories(xap);
                         xap.CopyFromDirectory(_dir, "");
                         xap.Close();
                     }
