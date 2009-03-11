@@ -276,7 +276,7 @@ namespace Microsoft.Scripting.Silverlight {
 
         private void HandleException(Exception e) {
             _outputBuffer.WriteLine(string.Format("{0}: {1}", e.GetType(), e.Message));
-            var dfs = Microsoft.Scripting.Runtime.RuntimeHelpers.GetDynamicStackFrames(e);
+            var dfs = Microsoft.Scripting.Runtime.ScriptingRuntimeHelpers.GetDynamicStackFrames(e);
             if(dfs == null || dfs.Length == 0) {
                 _outputBuffer.WriteLine(e.StackTrace != null ? e.StackTrace : e.ToString());
             } else {
