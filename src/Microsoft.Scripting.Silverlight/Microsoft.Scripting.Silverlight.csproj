@@ -24,7 +24,7 @@
     <NoStdLib>true</NoStdLib>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <SilverlightBuild>true</SilverlightBuild>
-    <SilverlightInstallPath>$(ProgramFiles)\Microsoft Silverlight\3.0.40226.0</SilverlightInstallPath>
+    <SilverlightInstallPath>$(ProgramFiles)\Microsoft Silverlight\3.0.40307.0</SilverlightInstallPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Silverlight Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,20 +37,20 @@
     <NoStdLib>true</NoStdLib>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <SilverlightBuild>true</SilverlightBuild>
-    <SilverlightInstallPath>$(ProgramFiles)\Microsoft Silverlight\3.0.40226.0</SilverlightInstallPath>
+    <SilverlightInstallPath>$(ProgramFiles)\Microsoft Silverlight\3.0.40307.0</SilverlightInstallPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Scripting, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Microsoft.Scripting.dll</HintPath>
+      <HintPath>..\Dependencies\ironruby\Merlin\Main\Bin\Silverlight Debug\Microsoft.Scripting.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Scripting.Core, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Microsoft.Scripting.Core.dll</HintPath>
+      <HintPath>..\Dependencies\ironruby\Merlin\Main\Bin\Silverlight Debug\Microsoft.Scripting.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Scripting.ExtensionAttribute, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Microsoft.Scripting.ExtensionAttribute.dll</HintPath>
+      <HintPath>..\Dependencies\ironruby\Merlin\Main\Bin\Silverlight Debug\Microsoft.Scripting.ExtensionAttribute.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>

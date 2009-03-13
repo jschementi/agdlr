@@ -3,4 +3,4 @@
 	url = git@github.com:jschementi/eggs.git
 [submodule "src/Dependencies/ironruby"]
 	path = src/Dependencies/ironruby
-	url = git://github.com/ironruby/ironruby.git
+	url = git@github.com:jschementi/ironruby.git
