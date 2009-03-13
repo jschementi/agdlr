@@ -124,20 +124,22 @@ namespace Microsoft.Scripting.Silverlight {
 
         #region Implementation
         private Window(HtmlElement windowLocationDiv, bool injectStyleAndScript) {
-            _windowLocationDiv = windowLocationDiv;
-            if (_windowLocationDiv == null) {
-                _windowLocationDiv = HtmlPage.Document.CreateElement("div");
-                _windowLocationDiv.Id = _windowContainerId;
-            }
-            if (HtmlPage.Document.GetElementById(_windowLocationDiv.Id) == null) {
-                HtmlPage.Document.Body.AppendChild(_windowLocationDiv);
-            }
-            _windowLocationDiv.SetProperty("innerHTML", WindowHtml());
+            if (_current == null) {
+                _windowLocationDiv = windowLocationDiv;
+                if (_windowLocationDiv == null) {
+                    _windowLocationDiv = HtmlPage.Document.CreateElement("div");
+                    _windowLocationDiv.Id = _windowContainerId;
+                }
+                if (HtmlPage.Document.GetElementById(_windowLocationDiv.Id) == null) {
+                    HtmlPage.Document.Body.AppendChild(_windowLocationDiv);
+                }
+                _windowLocationDiv.SetProperty("innerHTML", WindowHtml());
 
-            if (injectStyleAndScript) {
-                InjectScriptBlock();
-                InjectStyleBlock();
-                injectStyleAndScript = false;
+                if (injectStyleAndScript) {
+                    InjectScriptBlock();
+                    InjectStyleBlock();
+                    injectStyleAndScript = false;
+                }
             }
         }
 
@@ -152,7 +154,25 @@ namespace Microsoft.Scripting.Silverlight {
         private HtmlElement EmbedResourceInTag(string tagName, string mimeType, string filename) {
             var block = HtmlPage.Document.CreateElement(tagName);
             block.SetAttribute("type", mimeType);
-            block.SetProperty("innerHTML", GetResource(filename));
+            
+            string scriptOrStyle = GetResource(filename);
+            
+            var ieScriptOrStyleSet = false;
+
+            if (HtmlPage.BrowserInformation.UserAgent.Contains("Trident")) {
+                if (tagName == "script") {
+                    block.SetProperty("text", scriptOrStyle);
+                    ieScriptOrStyleSet = true;
+                } else if (tagName == "style") {
+                    (block.GetProperty("styleSheet") as ScriptObject).SetProperty("cssText", scriptOrStyle);
+                    ieScriptOrStyleSet = true;
+                }
+            }
+            
+            if(!ieScriptOrStyleSet) {
+                var textNode = HtmlPage.Document.Invoke("createTextNode", new string[] { scriptOrStyle });
+                (block as ScriptObject).Invoke("appendChild", new object[] { textNode });
+            }
             return block;
         }
 

@@ -198,23 +198,30 @@ namespace Microsoft.Scripting.Silverlight {
             return new Uri(baseUri + relativeUri, UriKind.Relative);
         }
 
-        public static ScriptRuntimeSetup CreateRuntimeSetup() {
+        public static ScriptRuntimeSetup CreateRuntimeSetup(IEnumerable<Assembly> assemblies) {
             ScriptRuntimeSetup setup = Configuration.TryParseFile();
             if (setup == null) {
-                setup = Configuration.LoadFromAssemblies(Package.GetManifestAssemblies());
+                if (assemblies == null) {
+                    assemblies = Package.GetManifestAssemblies();
+                }
+                setup = Configuration.LoadFromAssemblies(assemblies);
             }
             setup.HostType = typeof(BrowserScriptHost);
             return setup;
         }
 
-        public static StreamResourceInfo GetXapFile(ScriptRuntime runtime) {
-            return ((BrowserPAL)runtime.Host.PlatformAdaptationLayer).XapFile;
+        public static ScriptRuntimeSetup CreateRuntimeSetup() {
+            return CreateRuntimeSetup(null);
         }
 
-        public static void SetXapFile(ScriptRuntime runtime, StreamResourceInfo xapFile) {
-            ((BrowserPAL)runtime.Host.PlatformAdaptationLayer).XapFile = xapFile;
+        public static StreamResourceInfo XapFile {
+            get {
+                return BrowserPAL.PAL.XapFile;
+            }
+            set {
+                BrowserPAL.PAL.XapFile = value;
+            }
         }
-
         #endregion
 
         #region implementation

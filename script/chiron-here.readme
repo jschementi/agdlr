@@ -1,0 +1,28 @@
+chiron-here.reg
+by Jimmy Schementi
+
+Runs Chiron on any directory just by right-clicking on it.
+
+== UPDATE SDLSDK LOCATION!
+
+chiron-here.reg assumes that you unzipped sdl-sdk.zip into C:\sdl-sdk. If this
+is not the case, open chiron-here.reg in your editor of choice (notepad will do)
+and change the two paths to point to your sdl-sdk location. 
+
+== INSTALL
+
+Double click on chiron-here.reg file. It will prompt you to make sure you trust
+the source of the .reg file; click *Yes* if you want to install it. That's it! No
+reboot required.
+
+== USAGE
+
+You will now have two extra options when you right-click on a folder: "Start
+Chiron Here" and "Generate XAP Here". 
+
+"Start Chiron Here" will run Chiron on port 2060at the directory you right-clicked 
+on. Then navigate to http://localhost:2060 with your web-browser.
+
+"Generate XAP Here" will generate a XAP file to disk to deployment. The
+directory you right-clicked on will appear as a .xap file in the same parent
+directory.

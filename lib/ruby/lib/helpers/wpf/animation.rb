@@ -11,6 +11,8 @@ class Animation::Base
 end
 
 class BounceAnimation < Animation::Base
+  attr_reader :name
+
   def initialize(scale_transform_element)
     @name = random_name
     # NOTE that we don't need to name the storyboard element anymore! - can 
@@ -29,10 +31,5 @@ class BounceAnimation < Animation::Base
         add SplineDoubleKeyFrame, :key_time => '00:00:00.4', :value => 0.935
       end
     end
-  end
-
-  # TODO: cannot attr_reader :name
-  def name
-    @name
   end
 end

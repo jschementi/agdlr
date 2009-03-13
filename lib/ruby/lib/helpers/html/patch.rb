@@ -76,7 +76,6 @@ class HtmlElement
         raise e
       end
     else
-      # TODO: want to do EventHandler.of(HtmlEventArgs) to get proper arguments back
       unless attach_event(m.to_s.to_clr_string, System::EventHandler.of(HtmlEventArgs).new(&block))
         raise e
       end
