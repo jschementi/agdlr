@@ -251,49 +251,16 @@ namespace Microsoft.Scripting.Silverlight {
             ParseArguments(e.InitParams);
 
             if (!Package.ContainsDLRAssemblies(Deployment.Current.Parts)) {
-                // FIXME: for now, we manually redownload extensions, 
+                // FIXME: for now, we manually redownload extensions. 
                 // A SL bug is stopping us from using Deployment.Current.ExternalParts 
-                // to figure out what extensions has been requested by the application.
-                FetchDLRExtensions();
+                // to figure out what extensions have been requested by the application.
+                // FIXME: The extensions are downloaded one after the other ... should
+                // be done in parallel.
+                Extension.FetchDLR(delegate() {
+                    Start();
+                });
             }
         }
-
-        #region Downloading Extensions
-        void FetchExtensionCompleted(List<string> assemblyNames, object sender, OpenReadCompletedEventArgs e) {
-            var sri = new StreamResourceInfo(e.Result, null);
-            foreach (var assembly in assemblyNames) {
-                var dll = Application.GetResourceStream(sri,
-                    new Uri(string.Format("{0}.dll", assembly), UriKind.Relative));
-                if (dll != null) {
-                    Package.LanguageAssemblies.Add(dll);
-                }
-            }
-        }
-        void FetchDLRExtensions() {
-            WebClient wc = new WebClient(); 
-            string sRequest = Package.LanguageExtensionUris[0]; // DLR 
-            wc.OpenReadCompleted += new OpenReadCompletedEventHandler(FetchDLRExtensionCompleted);
-            wc.OpenReadAsync(new Uri(sRequest, UriKind.Absolute));
-        }
-
-        void FetchDLRExtensionCompleted(object sender, OpenReadCompletedEventArgs e) {
-            FetchExtensionCompleted(Package.DLRAssemblyNames, sender, e);
-            FetchLanguageExtensions();
-        }
-
-        void FetchLanguageExtensions() {
-            WebClient wc = new WebClient();
-            var index = 1; // FIXME: this defaults to IronRuby. Needs to figure out how to detect language this early on.
-            var uri = Package.LanguageExtensionUris[index];
-            wc.OpenReadCompleted += new OpenReadCompletedEventHandler(FetchLanguageExtensionsCompleted);
-            wc.OpenReadAsync(new Uri(uri));
-        }
-
-        void FetchLanguageExtensionsCompleted(object sender, OpenReadCompletedEventArgs e) {
-            FetchExtensionCompleted(Package.LanguageAssemblyNames, sender, e);
-            Start();
-        }
-        #endregion
 
         void Start() {
             InitializeDLR();

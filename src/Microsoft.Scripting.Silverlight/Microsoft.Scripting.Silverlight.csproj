@@ -92,6 +92,7 @@
     <Compile Include="BrowserPAL.cs" />
     <Compile Include="BrowserScriptHost.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="Extension.cs" />
     <Compile Include="Repl.cs" />
     <Compile Include="DynamicApplication.cs" />
     <Compile Include="ErrorFormatter.cs" />
