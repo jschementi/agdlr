@@ -26,6 +26,37 @@ namespace Microsoft.Scripting.Silverlight {
 
         private const string _defaultEntryPoint = "app";
 
+        private static List<string> _extensionUris = new List<string>() {
+            //"http://go.microsoft.com/fwlink/?LinkID=146361", // Microsoft.Scripting.slvx
+            //"http://go.microsoft.com/fwlink/?LinkID=146359", // IronRuby.slvx
+            //"http://go.microsoft.com/fwlink/?LinkID=146360", // IronPython.slvx
+            "http://jimmy.schementi.com/silverlight/Microsoft.Scripting.slvx",
+            "http://jimmy.schementi.com/silverlight/IronRuby.slvx",
+            "http://jimmy.schementi.com/silverlight/IronPython.slvx"
+        };
+
+        private static List<string> _languageAssemblyNames = new List<string>() {
+            "IronRuby",
+            "IronRuby.Libraries",
+            "IronPython",
+            "IronPython.Modules"
+        };
+
+        private static List<string> _dlrAssemblyNames = new List<String>()
+        {
+            "Microsoft.Scripting.Core",
+            "Microsoft.Scripting",
+            "Microsoft.Scripting.ExtensionAttribute",
+            "Microsoft.Scripting.Silverlight"
+        };
+
+        private static List<StreamResourceInfo> _languageAssemblies = new List<StreamResourceInfo>();
+
+        public static List<string> DLRAssemblyNames { get { return _dlrAssemblyNames; } }
+        public static List<string> LanguageAssemblyNames { get { return _languageAssemblyNames; }}
+        public static List<string> LanguageExtensionUris { get { return _extensionUris; }}
+        public static List<StreamResourceInfo> LanguageAssemblies { get { return _languageAssemblies; } }
+
         public static string GetFileContents(string relativePath) {
             return GetFileContents(null, relativePath);
         }
@@ -106,6 +137,18 @@ namespace Microsoft.Scripting.Silverlight {
             return result;
         }
 
+        public static IEnumerable<Assembly> GetExtensionAssemblies() {
+            var result = new List<Assembly>();
+            foreach (var sri in LanguageAssemblies) {
+                try {
+                    result.Add(new AssemblyPart().Load(sri.Stream));
+                } catch (Exception) {
+                    // skip
+                }
+            }
+            return result;
+        }
+
         public static string GetEntryPointContents() {
             string code = null;
 
@@ -138,6 +181,25 @@ namespace Microsoft.Scripting.Silverlight {
                 throw new ApplicationException(string.Format("Could not find the entry point file {0} in the XAP", DynamicApplication.Current.EntryPoint));
             }
             return code;
+        }
+
+        internal static bool ContainsDLRAssemblies(AssemblyPartCollection assemblyPartCollection) {
+            var ret = assemblyPartCollection.Count != 0;
+            
+            foreach (var name in _dlrAssemblyNames) {
+                var ap = new AssemblyPart();
+                ap.Source = name;
+                ret = ret && assemblyPartCollection.Contains(ap);
+            }
+
+            var rap = new AssemblyPart();
+            rap.Source = _languageAssemblyNames[0];
+            var pap = new AssemblyPart();
+            pap.Source = _languageAssemblyNames[2];
+
+            ret = ret && (assemblyPartCollection.Contains(rap) || assemblyPartCollection.Contains(pap));
+
+            return ret;
         }
     }
 }

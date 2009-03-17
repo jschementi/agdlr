@@ -24,6 +24,7 @@ using System.Xml;
 using Microsoft.Scripting.Hosting;
 using Microsoft.Scripting.Runtime;
 using Microsoft.Scripting.Utils;
+using System.Net;
 
 namespace Microsoft.Scripting.Silverlight {
 
@@ -146,7 +147,6 @@ namespace Microsoft.Scripting.Silverlight {
         internal static bool InUIThread {
             get { return _UIThreadId == Thread.CurrentThread.ManagedThreadId; }
         }
-
         #endregion
 
         #region public API
@@ -204,6 +204,9 @@ namespace Microsoft.Scripting.Silverlight {
                 if (assemblies == null) {
                     assemblies = Package.GetManifestAssemblies();
                 }
+                if (!Package.ContainsDLRAssemblies(Deployment.Current.Parts)) {
+                    assemblies = Package.GetExtensionAssemblies();
+                }
                 setup = Configuration.LoadFromAssemblies(assemblies);
             }
             setup.HostType = typeof(BrowserScriptHost);
@@ -246,9 +249,54 @@ namespace Microsoft.Scripting.Silverlight {
             ReportUnhandledErrors = true;
 
             ParseArguments(e.InitParams);
-            
-            InitializeDLR();
 
+            if (!Package.ContainsDLRAssemblies(Deployment.Current.Parts)) {
+                // FIXME: for now, we manually redownload extensions, 
+                // A SL bug is stopping us from using Deployment.Current.ExternalParts 
+                // to figure out what extensions has been requested by the application.
+                FetchDLRExtensions();
+            }
+        }
+
+        #region Downloading Extensions
+        void FetchExtensionCompleted(List<string> assemblyNames, object sender, OpenReadCompletedEventArgs e) {
+            var sri = new StreamResourceInfo(e.Result, null);
+            foreach (var assembly in assemblyNames) {
+                var dll = Application.GetResourceStream(sri,
+                    new Uri(string.Format("{0}.dll", assembly), UriKind.Relative));
+                if (dll != null) {
+                    Package.LanguageAssemblies.Add(dll);
+                }
+            }
+        }
+        void FetchDLRExtensions() {
+            WebClient wc = new WebClient(); 
+            string sRequest = Package.LanguageExtensionUris[0]; // DLR 
+            wc.OpenReadCompleted += new OpenReadCompletedEventHandler(FetchDLRExtensionCompleted);
+            wc.OpenReadAsync(new Uri(sRequest, UriKind.Absolute));
+        }
+
+        void FetchDLRExtensionCompleted(object sender, OpenReadCompletedEventArgs e) {
+            FetchExtensionCompleted(Package.DLRAssemblyNames, sender, e);
+            FetchLanguageExtensions();
+        }
+
+        void FetchLanguageExtensions() {
+            WebClient wc = new WebClient();
+            var index = 1; // FIXME: this defaults to IronRuby. Needs to figure out how to detect language this early on.
+            var uri = Package.LanguageExtensionUris[index];
+            wc.OpenReadCompleted += new OpenReadCompletedEventHandler(FetchLanguageExtensionsCompleted);
+            wc.OpenReadAsync(new Uri(uri));
+        }
+
+        void FetchLanguageExtensionsCompleted(object sender, OpenReadCompletedEventArgs e) {
+            FetchExtensionCompleted(Package.LanguageAssemblyNames, sender, e);
+            Start();
+        }
+        #endregion
+
+        void Start() {
+            InitializeDLR();
             StartMainProgram();
         }
 
@@ -278,16 +326,13 @@ namespace Microsoft.Scripting.Silverlight {
 
         private void StartMainProgram() {
             string code = Package.GetEntryPointContents();
-
             _engine = _runtime.GetEngineByFileExtension(Path.GetExtension(_entryPoint));
-            
             _entryPointScope = _engine.CreateScope();
 
             if (_consoleEnabled)
                 Repl.Show();
 
             ScriptSource sourceCode = _engine.CreateScriptSourceFromString(code, _entryPoint, SourceCodeKind.File);
-
             sourceCode.Compile(new ErrorFormatter.Sink()).Execute(_entryPointScope);
         }
 

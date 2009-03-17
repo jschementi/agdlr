@@ -98,9 +98,11 @@ namespace Microsoft.Scripting.Silverlight {
                 } else {
                     Window.Show(DynamicApplication.Current.ErrorTargetID);
                 }
-                Window.Current.AddPanel(engine.Setup.Names[0] + " Console", Create(engine, scope));
-                Window.Current.Initialize();
-                Repl.Current.Start();
+                if (engine != null) {
+                    Window.Current.AddPanel(engine.Setup.Names[0] + " Console", Create(engine, scope));
+                    Window.Current.Initialize();
+                    Repl.Current.Start();
+                }
             }
         }
 
