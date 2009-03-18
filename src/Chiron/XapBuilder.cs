@@ -67,9 +67,11 @@ namespace Chiron {
 
         // add directories that are on Chiron's path
         internal static void AddPathDirectories(ZipArchive zip) {
-            foreach (var path in Chiron.LocalPath) {
-                string[] splitPath = path.Split(Path.DirectorySeparatorChar);
-                zip.CopyFromDirectory(path, splitPath[splitPath.Length - 1]);
+            if (Chiron.LocalPath != null) {
+                foreach (var path in Chiron.LocalPath) {
+                    string[] splitPath = path.Split(Path.DirectorySeparatorChar);
+                    zip.CopyFromDirectory(path, splitPath[splitPath.Length - 1]);
+                }
             }
         }
 
