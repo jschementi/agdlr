@@ -227,6 +227,21 @@ namespace Microsoft.Scripting.Silverlight {
         }
         #endregion
 
+        public static void LoadAssemblies(Action onComplete) {
+            if (!Package.ContainsDLRAssemblies(Deployment.Current.Parts)) {
+                // FIXME: for now, we manually redownload extensions.
+                // A SL bug is stopping us from using Deployment.Current.ExternalParts
+                // to figure out what extensions have been requested by the application.
+                // FIXME: The extensions are downloaded one after the other ... should
+                // be done in parallel.
+                Extension.FetchDLR(delegate() {
+                    onComplete.Invoke();
+                });
+            } else {
+                onComplete.Invoke();
+            }
+        }
+
         #region implementation
 
         /// <summary>
@@ -250,16 +265,9 @@ namespace Microsoft.Scripting.Silverlight {
 
             ParseArguments(e.InitParams);
 
-            if (!Package.ContainsDLRAssemblies(Deployment.Current.Parts)) {
-                // FIXME: for now, we manually redownload extensions. 
-                // A SL bug is stopping us from using Deployment.Current.ExternalParts 
-                // to figure out what extensions have been requested by the application.
-                // FIXME: The extensions are downloaded one after the other ... should
-                // be done in parallel.
-                Extension.FetchDLR(delegate() {
-                    Start();
-                });
-            }
+            LoadAssemblies(delegate() {
+                Start();
+            });
         }
 
         void Start() {

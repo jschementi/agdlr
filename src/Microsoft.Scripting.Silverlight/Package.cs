@@ -183,23 +183,31 @@ namespace Microsoft.Scripting.Silverlight {
             return code;
         }
 
-        internal static bool ContainsDLRAssemblies(AssemblyPartCollection assemblyPartCollection) {
+        public static bool ContainsDLRAssemblies(AssemblyPartCollection assemblyPartCollection) {
             var ret = assemblyPartCollection.Count != 0;
             
             foreach (var name in _dlrAssemblyNames) {
-                var ap = new AssemblyPart();
-                ap.Source = name;
-                ret = ret && assemblyPartCollection.Contains(ap);
+                bool found = false;
+                foreach (AssemblyPart ap in assemblyPartCollection) {
+                    if (string.Format("{0}.dll", name) == ap.Source) {
+                        found = true;
+                        break;
+                    }
+                }
+                ret = ret && found;
             }
 
-            var rap = new AssemblyPart();
-            rap.Source = _languageAssemblyNames[0];
-            var pap = new AssemblyPart();
-            pap.Source = _languageAssemblyNames[2];
+            bool langFound = false;
+            foreach (AssemblyPart ap in assemblyPartCollection) {
+                var rb = string.Format("{0}.dll", _languageAssemblyNames[0]);
+                var py = string.Format("{0}.dll", _languageAssemblyNames[2]);
+                if(ap.Source == rb || ap.Source == py) {
+                    langFound = true;
+                    break;
+                }
+            }
 
-            ret = ret && (assemblyPartCollection.Contains(rap) || assemblyPartCollection.Contains(pap));
-
-            return ret;
+            return ret && langFound;
         }
     }
 }
