@@ -22,14 +22,16 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DLRPath>..\Dependencies\ironruby\Merlin\Main\Bin\Silverlight Debug\</DLRPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Bin\Silverlight Release\</OutputPath>
+    <OutputPath>..\..\Bin\release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DLRPath>..\Dependencies\ironruby\Merlin\Main\Bin\Silverlight Release\</DLRPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -78,10 +80,8 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>
-xcopy "$(ProjectDir)..\Dependencies\ironruby\Merlin\Main\Bin\Silverlight Debug\IronRuby.dll" $(TargetDir) /Y
-xcopy "$(ProjectDir)..\Dependencies\ironruby\Merlin\Main\Bin\Silverlight Debug\IronRuby.Libraries.dll" $(TargetDir) /Y
-xcopy "$(ProjectDir)..\Dependencies\ironruby\Merlin\Main\Bin\Silverlight Debug\IronPython.dll" $(TargetDir) /Y
-xcopy "$(ProjectDir)..\Dependencies\ironruby\Merlin\Main\Bin\Silverlight Debug\IronPython.Modules.dll" $(TargetDir) /Y
+xcopy "$(ProjectDir)$(DLRPath)IronRuby*" $(TargetDir) /Y
+xcopy "$(ProjectDir)$(DLRPath)IronPython*" $(TargetDir) /Y
     </PostBuildEvent>
     <PreBuildEvent>
     </PreBuildEvent>

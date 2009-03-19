@@ -30,9 +30,12 @@ namespace Microsoft.Scripting.Silverlight {
             //"http://go.microsoft.com/fwlink/?LinkID=146361", // Microsoft.Scripting.slvx
             //"http://go.microsoft.com/fwlink/?LinkID=146359", // IronRuby.slvx
             //"http://go.microsoft.com/fwlink/?LinkID=146360", // IronPython.slvx
-            "http://jimmy.schementi.com/silverlight/Microsoft.Scripting.slvx",
-            "http://jimmy.schementi.com/silverlight/IronRuby.slvx",
-            "http://jimmy.schementi.com/silverlight/IronPython.slvx"
+            //"http://jimmy.schementi.com/silverlight/Microsoft.Scripting.slvx",
+            //"http://jimmy.schementi.com/silverlight/IronRuby.slvx",
+            //"http://jimmy.schementi.com/silverlight/IronPython.slvx"
+            "http://jimmy.schementi.com/jflamdemo/Microsoft.Scripting.slvx",
+            "http://jimmy.schementi.com/jflamdemo/IronRuby.slvx",
+            "http://jimmy.schementi.com/jflamdemo/IronPython.slvx"
         };
 
         private static List<string> _languageAssemblyNames = new List<string>() {
