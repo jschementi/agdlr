@@ -202,10 +202,11 @@ namespace Microsoft.Scripting.Silverlight {
             ScriptRuntimeSetup setup = Configuration.TryParseFile();
             if (setup == null) {
                 if (assemblies == null) {
-                    assemblies = Package.GetManifestAssemblies();
-                }
-                if (!Package.ContainsDLRAssemblies(Deployment.Current.Parts)) {
-                    assemblies = Package.GetExtensionAssemblies();
+                    if (!Package.ContainsDLRAssemblies(Deployment.Current.Parts)) {
+                        assemblies = Package.GetExtensionAssemblies();
+                    } else {
+                        assemblies = Package.GetManifestAssemblies();
+                    }
                 }
                 setup = Configuration.LoadFromAssemblies(assemblies);
             }
