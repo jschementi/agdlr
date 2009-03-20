@@ -12,45 +12,51 @@
     <RootNamespace>Microsoft.Scripting.Silverlight</RootNamespace>
     <AssemblyName>Microsoft.Scripting.Silverlight</AssemblyName>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <AssemblyOriginatorKeyFile>..\Support\MSSharedLibKey.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly Condition="'$(SignAssembly)' == '' And Exists('$(AssemblyOriginatorKeyFile)')">true</SignAssembly>
+    <SignedSym Condition="'$(SignAssembly)' == 'true'">SIGNED</SignedSym>
+    <DelaySign>true</DelaySign>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Silverlight Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\bin\debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;$(SignedSym)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoStdLib>true</NoStdLib>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <SilverlightBuild>true</SilverlightBuild>
-    <SilverlightInstallPath>$(ProgramFiles)\Microsoft Silverlight\2.0.40115.0</SilverlightInstallPath>
+    <SilverlightInstallPath>$(ProgramFiles)\Microsoft Silverlight\3.0.40307.0</SilverlightInstallPath>
+    <DLRPath>..\Dependencies\ironruby\Merlin\Main\Bin\Silverlight Debug\</DLRPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Silverlight Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Bin\Silverlight Release\</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <OutputPath>..\..\bin\release\</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;$(SignedSym)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoStdLib>true</NoStdLib>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <SilverlightBuild>true</SilverlightBuild>
-    <SilverlightInstallPath>$(ProgramFiles)\Microsoft Silverlight\2.0.40115.0</SilverlightInstallPath>
+    <SilverlightInstallPath>$(ProgramFiles)\Microsoft Silverlight\3.0.40307.0</SilverlightInstallPath>
+    <DLRPath>..\Dependencies\ironruby\Merlin\Main\Bin\Silverlight Release\</DLRPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Scripting, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Microsoft.Scripting.dll</HintPath>
+      <HintPath>$(DLRPath)Microsoft.Scripting.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Scripting.Core, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Microsoft.Scripting.Core.dll</HintPath>
+      <HintPath>$(DLRPath)Microsoft.Scripting.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Scripting.ExtensionAttribute, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Microsoft.Scripting.ExtensionAttribute.dll</HintPath>
+      <HintPath>$(DLRPath)Microsoft.Scripting.ExtensionAttribute.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -63,6 +69,11 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Net, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SilverlightInstallPath)\System.Net.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Windows.Browser, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(SilverlightInstallPath)\System.Windows.Browser.dll</HintPath>
@@ -88,6 +99,7 @@
     <Compile Include="BrowserPAL.cs" />
     <Compile Include="BrowserScriptHost.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="Extension.cs" />
     <Compile Include="Repl.cs" />
     <Compile Include="DynamicApplication.cs" />
     <Compile Include="ErrorFormatter.cs" />

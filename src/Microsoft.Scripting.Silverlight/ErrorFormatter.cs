@@ -97,7 +97,7 @@ namespace Microsoft.Scripting.Silverlight {
             var report = HtmlPage.Document.CreateElement("div");
             report.Id = report.CssClass = _errorReportId;
             report.SetProperty("innerHTML", result);
-            Window.Current.AddPanel("Error Report (" + EscapeHtml(new DynamicExceptionInfo(e).Message) + ")", report);
+            Window.Current.AddPanel("Error Report (" + EscapeHtml(new DynamicExceptionInfo(e).ErrorTypeName) + ")", report);
             Window.Current.Initialize();
             Window.Current.ShowPanel(report.Id);
         }
@@ -264,13 +264,15 @@ namespace Microsoft.Scripting.Silverlight {
                     _sourceLine = _dynamicStackFrames[0].GetFileLineNumber();
                 }
 
-                ScriptEngine engine;
+                ScriptEngine engine = null;
                 try {
                     var extension = System.IO.Path.GetExtension(_sourceFileName);
                     DynamicApplication.Current.Runtime.TryGetEngineByFileExtension(extension, out engine);
                 } catch {
                     // running at an interactive prompt, so get the prompt's engine
-                    engine = Repl.Current.Engine;
+                    if (Repl.Current != null && Repl.Current.Engine != null) {
+                        engine = Repl.Current.Engine;
+                    }
                 }
                 if (_sourceFileName != null && engine != null) {
                     ExceptionOperations es = engine.GetService<ExceptionOperations>();

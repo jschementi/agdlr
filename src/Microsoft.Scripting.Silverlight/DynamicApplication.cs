@@ -24,6 +24,7 @@ using System.Xml;
 using Microsoft.Scripting.Hosting;
 using Microsoft.Scripting.Runtime;
 using Microsoft.Scripting.Utils;
+using System.Net;
 
 namespace Microsoft.Scripting.Silverlight {
 
@@ -146,7 +147,6 @@ namespace Microsoft.Scripting.Silverlight {
         internal static bool InUIThread {
             get { return _UIThreadId == Thread.CurrentThread.ManagedThreadId; }
         }
-
         #endregion
 
         #region public API
@@ -202,7 +202,11 @@ namespace Microsoft.Scripting.Silverlight {
             ScriptRuntimeSetup setup = Configuration.TryParseFile();
             if (setup == null) {
                 if (assemblies == null) {
-                    assemblies = Package.GetManifestAssemblies();
+                    if (!Package.ContainsDLRAssemblies(Deployment.Current.Parts)) {
+                        assemblies = Package.GetExtensionAssemblies();
+                    } else {
+                        assemblies = Package.GetManifestAssemblies();
+                    }
                 }
                 setup = Configuration.LoadFromAssemblies(assemblies);
             }
@@ -223,6 +227,21 @@ namespace Microsoft.Scripting.Silverlight {
             }
         }
         #endregion
+
+        public static void LoadAssemblies(Action onComplete) {
+            if (!Package.ContainsDLRAssemblies(Deployment.Current.Parts)) {
+                // FIXME: for now, we manually redownload extensions.
+                // A SL bug is stopping us from using Deployment.Current.ExternalParts
+                // to figure out what extensions have been requested by the application.
+                // FIXME: The extensions are downloaded one after the other ... should
+                // be done in parallel.
+                Extension.FetchDLR(delegate() {
+                    onComplete.Invoke();
+                });
+            } else {
+                onComplete.Invoke();
+            }
+        }
 
         #region implementation
 
@@ -246,9 +265,14 @@ namespace Microsoft.Scripting.Silverlight {
             ReportUnhandledErrors = true;
 
             ParseArguments(e.InitParams);
-            
-            InitializeDLR();
 
+            LoadAssemblies(delegate() {
+                Start();
+            });
+        }
+
+        void Start() {
+            InitializeDLR();
             StartMainProgram();
         }
 
@@ -278,16 +302,13 @@ namespace Microsoft.Scripting.Silverlight {
 
         private void StartMainProgram() {
             string code = Package.GetEntryPointContents();
-
             _engine = _runtime.GetEngineByFileExtension(Path.GetExtension(_entryPoint));
-            
             _entryPointScope = _engine.CreateScope();
 
             if (_consoleEnabled)
                 Repl.Show();
 
             ScriptSource sourceCode = _engine.CreateScriptSourceFromString(code, _entryPoint, SourceCodeKind.File);
-
             sourceCode.Compile(new ErrorFormatter.Sink()).Execute(_entryPointScope);
         }
 

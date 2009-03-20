@@ -26,7 +26,7 @@ div.silverlightDlrWindow a,
 div.silverlightDlrWindow a:link,
 div.silverlightDlrWindow a:visited {
   padding: 2px;
-  background-color: none;
+  background-color: transparent;
   color: black;
 }
 
@@ -58,7 +58,7 @@ div.silverlightDlrWindowMenu a:link,
 div.silverlightDlrWindowMenu a:visited {
   position: relative;
   padding: 2px 3px 2px;
-  background-color: none;
+  background-color: transparent;
   color: white;
   text-decoration: none;
 }
@@ -174,7 +174,7 @@ div.silverlightDlrErrorStackTraceLine {
   padding: 5px;
   background-color: #222;
   overflow: auto;
-  height: 300px;
+  height: 200px;
 }
 
 .silverlightDlrReplPrompt {

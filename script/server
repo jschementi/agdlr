@@ -1,3 +1,3 @@
 myfp=`which $0`
 mydir=`dirname $myfp`
-mono $mydir/../bin/debug/Chiron.exe $@
+mono $mydir/../bin/release/Chiron.exe $@
