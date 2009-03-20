@@ -28,7 +28,7 @@
     <NoStdLib>true</NoStdLib>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <SilverlightBuild>true</SilverlightBuild>
-    <SilverlightInstallPath>$(ProgramFiles)\Microsoft Silverlight\3.0.40307.0</SilverlightInstallPath>
+    <SilverlightInstallPath>$(ProgramFiles)\Microsoft Silverlight\2.0.40115.0</SilverlightInstallPath>
     <DLRPath>..\Dependencies\ironruby\Merlin\Main\Bin\Silverlight Debug\</DLRPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Silverlight Release|AnyCPU' ">
@@ -42,7 +42,7 @@
     <NoStdLib>true</NoStdLib>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <SilverlightBuild>true</SilverlightBuild>
-    <SilverlightInstallPath>$(ProgramFiles)\Microsoft Silverlight\3.0.40307.0</SilverlightInstallPath>
+    <SilverlightInstallPath>$(ProgramFiles)\Microsoft Silverlight\2.0.40115.0</SilverlightInstallPath>
     <DLRPath>..\Dependencies\ironruby\Merlin\Main\Bin\Silverlight Release\</DLRPath>
   </PropertyGroup>
   <ItemGroup>
