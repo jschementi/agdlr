@@ -14,11 +14,11 @@ module ArbitraryModuleSoConsoleDoesNotConflict
     end
   
     before do
-      @path ||= "#{File.dirname(__FILE__)}/assets/tmp.txt"
+      @path ||= "unit/assets/tmp.txt"
       @uri ||= Uri.new(@path, UriKind.relative)
       @contents ||= "Hello!\r\n".to_clr_string
-      @doesnotexist ||= "#{File.dirname(__FILE__)}/assets/doesnotexist.txt"
-      @other_xap_uri = Uri.new("#{File.dirname(__FILE__)}/assets/pkg.xap", UriKind.relative)
+      @doesnotexist ||= "unit/assets/doesnotexist.txt"
+      @other_xap_uri = Uri.new("unit/assets/pkg.xap", UriKind.relative)
       @other_xap = Application.get_resource_stream(@other_xap_uri)
     end
   
@@ -67,6 +67,7 @@ module ArbitraryModuleSoConsoleDoesNotConflict
         "Microsoft.Scripting.ExtensionAttribute",
         "Microsoft.Scripting.Core",
         "Microsoft.Scripting",
+        "Microsoft.Scripting.Silverlight",
         "IronRuby",
         "IronRuby.Libraries",
         "IronPython",
