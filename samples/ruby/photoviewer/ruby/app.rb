@@ -1,5 +1,5 @@
 require "silverlight"
-require 'json'
+require 'system-json'
 require 'render'
 
 class App < SilverlightApplication
@@ -46,6 +46,7 @@ class App < SilverlightApplication
 
   def show
     @flickr = System::Json::JsonValue.parse(@response)
+    load 'system-json.rb'
     render
     if document.overlay && document.lightbox
       document.overlay.parent.remove_child document.overlay

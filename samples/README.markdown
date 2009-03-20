@@ -1,0 +1,18 @@
+Samples
+=======
+
+http://silverlight.net/dlr | http://codeplex.com/sdlsdk
+
+The "Silverlight Dynamic Languages SDK" is the integration between Silverlight 
+and Dynamic Languages running on the Dynamic Language Runtime (DLR). The 
+languages included in this package are IronRuby and IronPython
+
+The Silverlight Dynamic Languages SDK is required to run these samples; 
+please download it from http://codeplex.com/sdlsdk. Simply unzip this 
+package into the SDK's root directory.
+
+Note: this package is meant to be used to develop applications with 
+Silverlight 2. To install Silverlight, visit the following:
+
+http://www.microsoft.com/silverlight/resources/install.aspx?v=2.0
+
