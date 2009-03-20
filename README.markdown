@@ -5,8 +5,7 @@ AgDLR - Dynamic Languages in Silverlight
 
   "agdlr", the Silverlight Dynamic Languages project, is the integration 
   between Silverlight and Dynamic Languages running on the Dynamic Language 
-  Runtime (DLR). The languages included in this package are IronRuby, 
-  IronPython, and Managed JScript.
+  Runtime (DLR). The languages included in this package are IronPython and IronRuby.
 
   Note: this package is meant to be used to develop applications with 
   Silverlight 2 RTW. Install Silverlight for [Windows](http://go.microsoft.com/fwlink/?LinkID=119972)
@@ -14,17 +13,21 @@ AgDLR - Dynamic Languages in Silverlight
 
 Package
 -------
-  /script:  tools for creating and running Silverlight applications
+  /bin:       AgDLR Binaries
+  
+  /docs:      Documentation
 
-  /LICENSE: Microsoft Public License
+  /samples:   See /samples/README for more information
+  
+  /script:    Tools for creating and running Silverlight applications
 
-  /README:  This file.
+  /test:      AgDLR Test Suite. Run with /script/test.bat
+  
+  /utilities: See /utilities/README.markdown
 
-  /samples: See /samples/README for more information
+  /src.url:   Source code download link for Microsoft.Scripting.Silverlight.dll and Chiron.exe.
 
-  /src:     Source code for Microsoft.Scripting.Silverlight.dll and Chiron.exe. See /src/README for more information.
-
-  /lib:     Ruby and Python Silverlight libraries 
+  /LICENSE:   Microsoft Public License
 
 Getting Started
 ---------------

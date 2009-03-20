@@ -2,6 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head>
     <title>AgDLR Test Runner</title>
+
+    <!-- Basic stylesheet for application -->
+    <link type="text/css" rel="stylesheet" href="css/screen.css" />
+
+    <!-- Defines "onSilverlightError" function for Silverlight plugin -->
+    <script type="text/javascript" src="js/error.js"></script>
 </head>
 
 <body>
@@ -15,7 +21,7 @@
   <div id="silverlightControlHost">
 
     <!-- 
-      Silverlight 2 Beta 2 plug-in control 
+      Silverlight plug-in control 
       http://msdn.microsoft.com/en-us/library/cc189089(VS.95).aspx#silverlight_plug_in_configuring
     -->
     <object data="data:application/x-silverlight," type="application/x-silverlight-2" width="300" height="300">
@@ -61,13 +67,17 @@
             of the error window is defined in a separate error.css file that must 
             be included in the page.
 
-        * exceptionDetail = true|false
+        * exceptionDetail = true|[false]
           - If set to true, this will also show the entire managed stack trace 
             in the error window rather than just the dynamic stack trace. 
             This is useful when debugging C#/Visual Basic when called from a 
             dynamic language.
+
+        * console = true|[false]
+          - If set to true, will show a read-eval-print loop (REPL) window at
+            the bottom of the page, for whatever language the start script is in.
       -->
-      <param name="initParams" value="debug=true, reportErrors=errorLocation, console = true" />
+      <param name="initParams" value="debug=true, reportErrors=errorLocation" />
         
       <!-- Handle all Silverlight errors with function defined in javascripts/error.js -->
       <param name="onerror" value="onSilverlightError" />
@@ -78,6 +88,11 @@
       -->
       <param name="background" value="white" />
       <param name="windowless" value="true" />
+
+      <!--
+	  <param name="minRuntimeVersion" value="2.0.31005.0" />
+      <param name="autoUpgrade" value="true" />
+      -->
 
       <!-- 
         Shows a "Install Microsoft Silverlight" link if Silverlight is 
