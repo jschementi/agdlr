@@ -3,12 +3,11 @@
 <head>
     <title>Silverlight Template</title>
 
-    <!-- Basic stylesheet for applicaiton -->
-    <link type="text/css" rel="stylesheet" href="stylesheets/screen.css" />
-    <!-- Formatting for Dynamic Language error window -->
-    <link type="text/css" rel="stylesheet" href="stylesheets/error.css" />
+    <!-- Basic stylesheet for application -->
+    <link type="text/css" rel="stylesheet" href="css/screen.css" />
+
     <!-- Defines "onSilverlightError" function for Silverlight plugin -->
-    <script type="text/javascript" src="javascripts/error.js"></script>
+    <script type="text/javascript" src="js/error.js"></script>
 </head>
 
 <body>
@@ -22,7 +21,7 @@
   <div id="silverlightControlHost">
 
     <!-- 
-      Silverlight 2 Beta 2 plug-in control 
+      Silverlight plug-in control 
       http://msdn.microsoft.com/en-us/library/cc189089(VS.95).aspx#silverlight_plug_in_configuring
     -->
     <object data="data:application/x-silverlight," type="application/x-silverlight-2" width="100%" height="100%">
@@ -31,7 +30,7 @@
         "source" points to the actual Silverlight application
         If using "Chiron /w", value should be the "<your app folder>.xap"
       -->
-      <param name="source" value="python.xap"/>
+      <param name="source" value="app.xap"/>
 
       <!-- 
         "initParams" is a comma-seperated way to pass key=value pair arguments 
@@ -68,13 +67,17 @@
             of the error window is defined in a separate error.css file that must 
             be included in the page.
 
-        * exceptionDetail = true|false
+        * exceptionDetail = true|[false]
           - If set to true, this will also show the entire managed stack trace 
             in the error window rather than just the dynamic stack trace. 
             This is useful when debugging C#/Visual Basic when called from a 
             dynamic language.
+
+        * console = true|[false]
+          - If set to true, will show a read-eval-print loop (REPL) window at
+            the bottom of the page, for whatever language the start script is in.
       -->
-      <param name="initParams" value="debug=true, reportErrors=errorLocation" />
+      <param name="initParams" value="debug=true, reportErrors=errorLocation, console=true" />
         
       <!-- Handle all Silverlight errors with function defined in javascripts/error.js -->
       <param name="onerror" value="onSilverlightError" />
@@ -90,7 +93,7 @@
         Shows a "Install Microsoft Silverlight" link if Silverlight is 
         not installed
       -->
-      <a href="http://go.microsoft.com/fwlink/?LinkID=115261" style="text-decoration: none;">
+      <a href="http://go.microsoft.com/fwlink/?LinkID=124807" style="text-decoration: none;">
         <img src="http://go.microsoft.com/fwlink/?LinkId=108181" alt="Get Microsoft Silverlight" style="border-style: none"/>
       </a>
 

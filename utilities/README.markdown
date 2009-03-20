@@ -1,6 +1,5 @@
 Utilities
 =========
-
 chiron-here.reg
 ---------------
 Runs Chiron on any directory just by right-clicking on it.
@@ -29,24 +28,24 @@ Runs Chiron on any directory just by right-clicking on it.
   directory you right-clicked on will appear as a .xap file in the same parent
   directory.
 
-Chiron HTTP Handler
-===================
+XAP HTTP Handler
+================
 
 Chiron.exe contains the XapHttpHandler type, which is a HttpHandler to enable 
 IIS or the ASP.NET Development WebServer (Cassini) to auto-xap any directory
 when requested with the .xap extension, just like Chiron does.
 
-ChironHttpHandler\ChironHttpHandler.sln is a example of this working in action. 
+xap-http-handler\XapHttpHandler.sln is a example of this working in action. Make
+sure to run xap-http-handler\update.bat first, so the DLR binaries are copied to
+the website.
+
 To set it up for your own project:
 
 Visual Studio ASP.NET Development WebServer (Cassini)
 -----------------------------------------------------
 1. Create a ASP.NET Website project
-2. Add the binaries produced from agdlr.sln to a Bin folder inside the website.
-3. Add the following to web.config:
-
-(TODO: Chiron.exe.config sections, as well as the same web.config stuff that
- ChironHttpHandler.sln has)
+2. Add the binaries in the bin folder to a Bin folder inside the website.
+3. Copy xap-http-handler\XapHttpHandler.SampleSite\web.config to your app
 
 IIS
 ---
