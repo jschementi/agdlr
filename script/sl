@@ -3,7 +3,7 @@
 FILE_PATH = File.expand_path(File.dirname(__FILE__))
 usage = <<-EOS
 
-Usage: sl [ruby|python|jscript] <application_name>
+Usage: sl [ruby|python] <application_name>
   Creates a Silverlight application in the "application_name" directory.
 EOS
 require 'fileutils'

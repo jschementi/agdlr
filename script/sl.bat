@@ -47,7 +47,7 @@ goto END
 echo This is a tool to create a Silverlight application for dynamic languages.
 echo.
 echo Usage:
-echo     sl [python] ^<ApplicationPath^>
+echo     sl [ruby^|python] ^<ApplicationPath^>
 echo.
 
 
