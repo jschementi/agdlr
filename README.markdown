@@ -1,7 +1,7 @@
 AgDLR - Dynamic Languages in Silverlight
 ========================================
-  http://silverlight.net/dlr
-  http://sdlsdk.codeplex.com
+  [Dynamic Languages on Silverlight.net](http://silverlight.net/dlr)
+  [AgDLR Project Homepage](http://sdlsdk.codeplex.com)
 
   "agdlr", the Silverlight Dynamic Languages project, is the integration 
   between Silverlight and Dynamic Languages running on the Dynamic Language 
@@ -9,10 +9,8 @@ AgDLR - Dynamic Languages in Silverlight
   IronPython, and Managed JScript.
 
   Note: this package is meant to be used to develop applications with 
-  Silverlight 2 RTW. To install Silverlight, visit the following:
-
-  Windows: http://go.microsoft.com/fwlink/?LinkID=119972
-  Mac:     http://go.microsoft.com/fwlink/?LinkID=119973
+  Silverlight 2 RTW. Install Silverlight for [Windows](http://go.microsoft.com/fwlink/?LinkID=119972)
+  or the [Mac](http://go.microsoft.com/fwlink/?LinkID=119973)
 
 Package
 -------
@@ -24,8 +22,7 @@ Package
 
   /samples: See /samples/README for more information
 
-  /src:     Source code for Microsoft.Scripting.Silverlight.dll and Chiron.exe.
-            See /src/README for more information.
+  /src:     Source code for Microsoft.Scripting.Silverlight.dll and Chiron.exe. See /src/README for more information.
 
   /lib:     Ruby and Python Silverlight libraries 
 
@@ -33,29 +30,25 @@ Getting Started
 ---------------
   1. Create a new Silverlight application
 
-    > script/sl [ruby|python|jscript] <application_name>
+      script/sl [ruby|python] <application_name>
 
     This will create a Silverlight application in the language of your choosing in
     the "application_name" directory where you ran the script.
 
-    This command requires Ruby to be installed.
-      Windows:  "One-Click Installer" for Ruby: http://rubyforge.org/frs/?group_id=167
-      Mac OS X: Ships with Ruby pre-installed.
-
   2. Run an application
 
-    > script/server /b
+      script/server /b
 
     This will launch Chiron, the Silverlight development utility, as well as open
-    your default browser to http://localhost:2060. If you pass the /w
+    your default browser to [http://localhost:2060](http://localhost:2060). If you pass the /w
     instead of the /b switch, it will just start the server and not launch your
     browser. See the Chiron section below for more of its usage details.
 
-    Note: Place </path/to>/sdlsdk/script on your PATH to omit the "script/" from
-          these commands.
+    Note: run script/env.bat, which will add scripts to your path, shortening the command
+    to just "server".
 
     This command requires Mono to be installed on the Mac.
-    http://www.go-mono.com/mono-downloads/download.html.
+    [Download Mono](http://www.go-mono.com/mono-downloads/download.html)
 
 CHANGELOG
 ---------
@@ -93,14 +86,12 @@ CHANGELOG
   - Managed JScript has been removed from the package.
 
   - Thanks for the contributions!
-    o Removed UI thread check in FileExists (Eloff) November 26, 2008
-      commit  bd9b2d56eeda8aea69b90245f86493fc22ca0803
-    o Fixed ErrorReporter bug when _sourceFileName is not a file on disk (e.g. 
-      <string>) (Eloff) November 26, 2008
-      commit  61ee0134167a546a55cf138ef63edc5d7eb4b830
-    o XapHttpHandler gives IIS or Cassini the auto-XAPing power of Chiron (also
-      in utilities) (Harry Pierson) March 19, 2009
-      commit  63a5ea3cf94068b87273531b5c96d84d8de983d2
+    * Removed UI thread check in FileExists (Eloff) November 26, 2008
+      commit bd9b2d56eeda8aea69b90245f86493fc22ca0803
+    * Fixed ErrorReporter bug when _sourceFileName is not a file on disk (e.g. <string>) (Eloff) November 26, 2008
+      commit 61ee0134167a546a55cf138ef63edc5d7eb4b830
+    * XapHttpHandler gives IIS or Cassini the auto-XAPing power of Chiron (also in utilities) (Harry Pierson) March 19, 2009
+      commit 63a5ea3cf94068b87273531b5c96d84d8de983d2
 
   0.4.0 - 2008-10-15
 
