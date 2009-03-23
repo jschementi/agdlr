@@ -18,13 +18,13 @@ class Render
   end
 
   def photo(p)
-    source = "http://farm#{p.farm.to_i}.static.flickr.com/#{p.server}/#{p.id}_#{p.secret}"
+    source = "http://farm#{p.farm.to_i}.static.flickr.com/#{p.server}/#{p.photo_id}_#{p.secret}"
     thumb = "#{source}_s.jpg"
     img = "#{source}.jpg"
     tag(:div, :class => 'image') do
       tag(:a, { 
         :href  => "#{img}", 
-        :title => "&lt;a href=&quot;http://www.flickr.com/photos/#{p.owner}/#{p.id}&quot; target=&quot;_blank&quot;&gt;#{p.title}&lt;/a&gt;",
+        :title => "&lt;a href=&quot;http://www.flickr.com/photos/#{p.owner}/#{p.photo_id}&quot; target=&quot;_blank&quot;&gt;#{p.title}&lt;/a&gt;",
         :rel   => "lightbox[#{@tags}]"
       }) do
         tag(:img, :src => "#{thumb}")

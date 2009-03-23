@@ -4,13 +4,15 @@ include System
 module System::Json
   class JsonValue
     def method_missing(index)
-      item = self.get_Item(index.to_s.to_clr_string)
+      index = 'id' if index.to_s == 'photo_id'
+      item = self.item(index.to_s)
       super if item.nil?
-      type = item.get_JsonType
-      return item.to_string.to_s.to_f if type == JsonType.Number
-      return item.to_string.to_s.split("\"").last if type == JsonType.String
-      return System::Boolean.parse(item) if type == JsonType.Boolean
-      item
+      case item.json_type
+        when JsonType.string:  item.to_string.to_s.split("\"").last
+        when JsonType.number:  item.to_string.to_s.to_f
+        when JsonType.boolean: System::Boolean.parse(item)
+        else item
+      end
     end
 
     def inspect
