@@ -71,7 +71,11 @@ class HtmlElement
 
   def method_missing(m, &block)
     if(block.nil?)
-      self[m]
+      if m.to_s == "click"
+        invoke(m.to_s)
+      else
+        self[m]
+      end
     else
       attach_event(m.to_s.to_clr_string, System::EventHandler.new(&block))
     end
