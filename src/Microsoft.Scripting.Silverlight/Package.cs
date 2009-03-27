@@ -30,12 +30,9 @@ namespace Microsoft.Scripting.Silverlight {
             //"http://go.microsoft.com/fwlink/?LinkID=146361", // Microsoft.Scripting.slvx
             //"http://go.microsoft.com/fwlink/?LinkID=146359", // IronRuby.slvx
             //"http://go.microsoft.com/fwlink/?LinkID=146360", // IronPython.slvx
-            //"http://jimmy.schementi.com/silverlight/Microsoft.Scripting.slvx",
-            //"http://jimmy.schementi.com/silverlight/IronRuby.slvx",
-            //"http://jimmy.schementi.com/silverlight/IronPython.slvx"
-            "http://jimmy.schementi.com/jflamdemo/Microsoft.Scripting.slvx",
-            "http://jimmy.schementi.com/jflamdemo/IronRuby.slvx",
-            "http://jimmy.schementi.com/jflamdemo/IronPython.slvx"
+            "http://jimmy.schementi.com/silverlight/Microsoft.Scripting-0.5.0.slvx",
+            "http://jimmy.schementi.com/silverlight/IronRuby-0.5.0.slvx",
+            "http://jimmy.schementi.com/silverlight/IronPython-0.5.0.slvx"
         };
 
         private static List<string> _languageAssemblyNames = new List<string>() {
@@ -61,11 +58,11 @@ namespace Microsoft.Scripting.Silverlight {
         public static List<StreamResourceInfo> LanguageAssemblies { get { return _languageAssemblies; } }
 
         public static string GetFileContents(string relativePath) {
-            return GetFileContents(null, relativePath);
+            return GetFileContents(DynamicApplication.XapFile, relativePath);
         }
 
         public static string GetFileContents(Uri relativeUri) {
-            return GetFileContents(null, relativeUri);
+            return GetFileContents(DynamicApplication.XapFile, relativeUri);
         }
 
         public static string GetFileContents(StreamResourceInfo xap, string relativePath) {
@@ -86,11 +83,11 @@ namespace Microsoft.Scripting.Silverlight {
         }
 
         public static Stream GetFile(string relativePath) {
-            return GetFileInternal(null, relativePath);
+            return GetFileInternal(DynamicApplication.XapFile, relativePath);
         }
 
         public static Stream GetFile(Uri relativeUri) {
-            return GetFileInternal(null, relativeUri);
+            return GetFileInternal(DynamicApplication.XapFile, relativeUri);
         }
         
         public static Stream GetFile(StreamResourceInfo xap, string relativePath) {
