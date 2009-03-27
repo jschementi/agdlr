@@ -233,13 +233,21 @@ namespace Microsoft.Scripting.Silverlight {
             _code = (_code == null ? "" : _code + "\n") + line;
 
             if (_code != null) {
-                object result = (_code.Split('\n').Length > 1) ? DoMultiLine(forceExecute) : DoSingleLine(forceExecute);
+                var multiLine = _code.Split('\n').Length > 1;
+                
+                object result = null;
+                if (_code != string.Empty && !multiLine) {
+                    result = DoSingleLine(forceExecute);
+                } else {
+                    result = DoMultiLine(forceExecute);
+                }
 
                 ShowLineAndResult(line, result);
             }
         }
 
         private object DoSingleLine(bool forceExecute) {
+
             var valid = TryExpression(_code);
             if (valid != null) {
                 var source = _engine.CreateScriptSourceFromString(_code, SourceCodeKind.Expression);
