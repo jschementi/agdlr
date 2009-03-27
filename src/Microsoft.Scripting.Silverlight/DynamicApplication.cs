@@ -266,7 +266,9 @@ namespace Microsoft.Scripting.Silverlight {
 
             ParseArguments(e.InitParams);
 
-            Start();
+            DynamicApplication.LoadAssemblies(delegate() {
+                Start();
+            });
         }
 
         void Start() {
