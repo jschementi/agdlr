@@ -1,6 +1,0 @@
-bin
-src/*/obj
-*.sln.cache
-*.suo
-*csproj.user
-.*.swp

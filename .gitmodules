@@ -1,6 +1,0 @@
-[submodule "test/tests/lib/eggs"]
-	path = test/tests/lib/eggs
-	url = git@github.com:jschementi/eggs.git
-[submodule "src/Dependencies/ironruby"]
-	path = src/Dependencies/ironruby
-	url = git@github.com:jschementi/ironruby.git
